@@ -15,19 +15,6 @@
   #brand strong { display:block; font-size:15px; letter-spacing:.12em; }
   #brand span { color:#a8bac8; font-size:11px; letter-spacing:.08em; display:block; margin-top:2px; }
   #chunkInfo { color:#79d6ff !important; font-weight:700; font-size:10.5px !important; margin-top:4px !important; letter-spacing:.09em; }
-  #mpPanel { position:absolute; top:104px; left:16px; padding:10px 14px; min-width:210px; max-width:255px; }
-  #mpHeader { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-  #mpStatusWrap { display:flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.06em; color:#e6f2fa; }
-  #mpDot { width:8px; height:8px; border-radius:50%; background:#f59e0b; box-shadow:0 0 8px #f59e0b; flex-shrink:0; }
-  #mpDot.online { background:#34d399; box-shadow:0 0 8px #34d399; }
-  #mpDot.host { background:#79d6ff; box-shadow:0 0 8px #79d6ff; }
-  #mpDot.offline { background:#94a3b8; box-shadow:none; }
-  #mpCount { font-size:10.5px; font-weight:800; color:#79d6ff; background:rgba(121,214,255,.12); border:1px solid rgba(121,214,255,.28); padding:2px 7px; border-radius:999px; }
-  #mpPlayers { margin-top:7px; padding-top:7px; border-top:1px solid rgba(255,255,255,.1); display:flex; flex-direction:column; gap:4px; max-height:110px; overflow:hidden; }
-  .mp-player-row { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:#cbd5e1; }
-  .mp-player-name { display:flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:165px; }
-  .mp-swatch { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-  .mp-badge { font-size:9px; font-weight:800; letter-spacing:.06em; padding:1px 5px; border-radius:4px; background:rgba(255,255,255,.12); color:#a8bac8; }
   #stats { position:absolute; top:16px; right:16px; padding:12px 16px; min-width:180px; text-align:right; }
   #stats .label { color:#9fb2c1; font-size:10px; letter-spacing:.12em; }
   #speed { font-size:28px; font-weight:800; line-height:1.15; }
@@ -47,21 +34,20 @@
   #startCard { width:min(600px,calc(100vw - 32px)); padding:34px; border:1px solid #ffffff35; border-radius:22px; background:#0e1c2bfc; box-shadow:0 35px 110px #000b; }
   #startCard h1 { margin:0 0 10px; font-size:clamp(26px,5vw,42px); letter-spacing:.04em; }
   #startCard h1 span { color:var(--accent); }
-  #startCard p { color:#b7c7d3; line-height:1.6; font-size:14px; margin-bottom:18px; }
-  #nameRow { display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
-  #nameRow label { font-size:11px; font-weight:700; letter-spacing:.1em; color:#9fb2c1; text-transform:uppercase; }
-  #playerNameInput { flex:1; min-width:180px; background:#09131e; border:1px solid rgba(121,214,255,.35); border-radius:9px; padding:10px 13px; color:#f3f7fa; font:600 13px Inter,Segoe UI,Arial,sans-serif; outline:none; }
-  #playerNameInput:focus { border-color:#79d6ff; box-shadow:0 0 0 2px rgba(121,214,255,.2); }
+  #startCard p { color:#b7c7d3; line-height:1.6; font-size:14px; margin-bottom:22px; }
   #startCard button { border:0; border-radius:10px; padding:14px 24px; background:#70d2fa; color:#07121b; font-weight:800; cursor:pointer; font-size:15px; transition:.2s; }
   #startCard button:hover { background:#a0e5ff; transform:translateY(-2px); }
   #startCard small { display:block; color:#8398a8; margin-top:16px; line-height:1.5; }
   #corner { position:absolute; right:16px; bottom:16px; display:flex; gap:8px; pointer-events:auto; }
   .tool { border:1px solid var(--line); background:var(--panel); color:#eaf5fc; border-radius:10px; padding:10px 14px; cursor:pointer; font-size:11px; font-weight:600; transition:.2s; }
   .tool:hover { background:#20394a; }
+  #multiplayerStatus { position:fixed; top:82px; left:16px; z-index:4; pointer-events:none; padding:8px 12px; border:1px solid #ffffff25; border-radius:10px; background:#0a111bdc; color:#c9d9e5; font-size:11px; letter-spacing:.04em; box-shadow:0 8px 24px #0005; }
+  #multiplayerStatus .dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#e6b450; margin-right:7px; box-shadow:0 0 8px currentColor; }
+  #multiplayerStatus.online .dot { background:#55df9a; }
+  #multiplayerStatus.error .dot { background:#ff7070; }
   #loading { position:fixed; inset:0; display:grid; place-items:center; z-index:10; background:#0c1620; color:#c8d8e4; font-size:15px; font-weight:600; }
   @media(max-width:680px) {
     #brand {top:9px;left:9px;padding:9px 12px;}
-    #mpPanel {top:88px;left:9px;padding:8px 10px;min-width:165px;}
     #stats {top:9px;right:9px;padding:9px 12px;min-width:140px;}
     #radarWrap {top:108px;right:9px;padding:6px;}
     #radar {width:110px;height:110px;}
@@ -69,34 +55,22 @@
     #corner {right:9px;bottom:9px;transform:translateY(-112%);}
   }
 </style>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
 <body>
 <div id="loading">Streaming Initial City Chunks…</div>
 <div id="start">
   <div id="startCard">
     <h1>LIFESIM <span>ONLINE</span></h1>
-    <p><b>Infinite Chunk-Streamed Metropolis &amp; Solid Physics Build</b><br>Explore an endless master-planned city with 4-lane divided highways, urban avenues, neighborhood streets, downtown skyscrapers, retail strips, suburban homes, live chunk streaming, and automatic seamless WebRTC peer-to-peer multiplayer.</p>
-    <div id="nameRow">
-      <label for="playerNameInput">Citizen Tag</label>
-      <input id="playerNameInput" type="text" maxlength="18" placeholder="Citizen-XXXX" autocomplete="off">
-    </div>
+    <p><b>Infinite Chunk-Streamed Metropolis & Solid Physics Build</b><br>Explore an endless master-planned city with 4-lane divided highways, urban avenues, neighborhood streets, downtown skyscrapers, retail strips, suburban homes, and live chunk streaming—with 100% road-safe zoning and full OBB collision physics.</p>
     <button id="startButton">Enter the Metropolis</button>
     <small>Click canvas to lock mouse. Press Esc to release. Walk up to any parked car and press E to drive, or hold SPACE while turning to drift.</small>
   </div>
 </div>
-<div id="hud">
+<div id="multiplayerStatus"><span class="dot"></span><span id="multiplayerText">MULTIPLAYER: STARTING…</span></div>\n<div id="hud">
   <div id="brand" class="panel">
     <strong>LIFESIM <span style="color:#79d6ff">ONLINE</span></strong>
     <span>CHUNK METROPOLIS BUILD 3.0</span>
     <span id="chunkInfo">CHUNK [0, 0] · 25 ACTIVE</span>
-  </div>
-  <div id="mpPanel" class="panel">
-    <div id="mpHeader">
-      <div id="mpStatusWrap"><span id="mpDot"></span><span id="mpStatusText">Finding session...</span></div>
-      <span id="mpCount">1 ONLINE</span>
-    </div>
-    <div id="mpPlayers"></div>
   </div>
   <div id="stats" class="panel">
     <div class="label">VEHICLE TELEMETRY</div>
@@ -118,6 +92,7 @@
 </script>
 <script type="module">
 import * as THREE from 'three';
+import { Peer } from 'https://esm.sh/peerjs@1.5.4';
 
 const loading = document.getElementById('loading');
 const toastEl = document.getElementById('toast');
@@ -314,6 +289,14 @@ const sharedMat = {
 // ============================================================================
 // MASTER-PLANNED CITY GRID & DETERMINISTIC CHUNK ZONING CONSTANTS
 // ============================================================================
+// Every chunk is 120m x 120m, centered at (cx * 120, cz * 120).
+// Chunk boundaries are at X = (cx ± 0.5) * 120 and Z = (cz ± 0.5) * 120.
+// - Every 4th boundary (boundaryIndex % 4 === 0) is a 28m-wide 4-Lane Divided HIGHWAY.
+// - Every other boundary is a 16m-wide 4-Lane URBAN AVENUE.
+// - The center axes of every chunk (X = cx * 120, Z = cz * 120) are 9m-wide 2-Lane LOCAL STREETS.
+// This divides every 120m chunk into 4 exact interior quadrants, bordered by sidewalks!
+// Zero trees, buildings, houses, or lamps are EVER placed outside the interior buildable lots.
+
 const CHUNK_SIZE = 120;
 const HALF_CHUNK = CHUNK_SIZE / 2; // 60m
 const RENDER_RADIUS = 2; // 5x5 = 25 active chunks around the player (600m x 600m live view)
@@ -324,6 +307,7 @@ const LOCAL_HALF_W   = 4.5;  // Total 9m roadbed
 const SIDEWALK_W     = 3.2;  // 3.2m sidewalk outside every road curb
 const LOT_SAFETY_PAD = 2.6;  // Extra setback inside sidewalk so nothing ever overhangs
 
+// Deterministic PRNG per chunk so revisiting any chunk generates the exact same city block!
 function mulberry32(seed) {
   let a = seed >>> 0;
   return function() {
@@ -340,6 +324,7 @@ function hashChunk(cx, cz, salt=0) {
   return (h ^ (h >>> 16)) >>> 0;
 }
 
+// Returns boundary road type for grid boundary index `bIdx` (located at world coord bIdx * 120 - 60)
 function getBoundaryRoadType(bIdx) {
   return (Math.abs(bIdx) % 4 === 0) ? 'HIGHWAY' : 'AVENUE';
 }
@@ -348,8 +333,9 @@ function getBoundaryHalfWidth(bIdx) {
   return getBoundaryRoadType(bIdx) === 'HIGHWAY' ? HIGHWAY_HALF_W : AVENUE_HALF_W;
 }
 
+// Determines district zoning for chunk (cx, cz)
 function getChunkDistrict(cx, cz) {
-  if(cx === 0 && cz === 0) return 'COMMERCIAL';
+  if(cx === 0 && cz === 0) return 'COMMERCIAL'; // Spawn chunk: vibrant shops, plaza, and park
   const distFromCenter = Math.hypot(cx, cz);
   const r = mulberry32(hashChunk(cx, cz, 99))();
   if(distFromCenter <= 2.2) {
@@ -363,11 +349,12 @@ function getChunkDistrict(cx, cz) {
   return 'SUBURBAN';
 }
 
+// Active chunks registry: key `${cx},${cz}` -> chunk data
 const activeChunks = new Map();
 let isDayMode = true;
 
 // ============================================================================
-// CHUNK BUILDER HELPERS
+// CHUNK BUILDER HELPERS (All meshes & colliders scoped strictly to chunk)
 // ============================================================================
 function chunkAddBox(chunk, lx, y, lz, w, h, d, material, castShadow=true, collide=true) {
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
@@ -435,19 +422,23 @@ function chunkAddTree(chunk, lx, lz, scale=1.0, rng=Math.random) {
   }
 }
 
+// Detailed Multi-Tiered Skyscraper / Commercial Tower
 function chunkAddSkyscraper(chunk, lx, lz, w, d, h, rng) {
   const matIdx = Math.floor(rng() * sharedMat.buildingPalette.length);
   const bodyMat = sharedMat.buildingPalette[matIdx];
 
+  // Ground Lobby Podium
   const podiumH = Math.min(5.2, h * 0.22);
   chunkAddBox(chunk, lx, podiumH/2, lz, w, podiumH, d, bodyMat, true, true);
   chunkAddBox(chunk, lx, 2.1, lz + d/2 + 0.04, Math.min(w*0.55, 6.2), 3.6, 0.1, sharedMat.glassDay, false, false);
   chunkAddBox(chunk, lx, 4.1, lz + d/2 + 0.75, Math.min(w*0.62, 7.0), 0.22, 1.5, sharedMat.steelDark, true, false);
 
+  // Main Tower Shaft (slightly inset for architectural depth)
   const mainW = w * 0.92, mainD = d * 0.92;
   const mainH = h - podiumH;
   chunkAddBox(chunk, lx, podiumH + mainH/2, lz, mainW, mainH, mainD, bodyMat, true, true);
 
+  // Upper Setback Tier for taller towers
   let topY = h;
   if(h > 34) {
     const tierH = 7.5;
@@ -455,6 +446,7 @@ function chunkAddSkyscraper(chunk, lx, lz, w, d, h, rng) {
     topY = h + tierH;
   }
 
+  // Roof Parapet & Details (Helipad or HVAC + Spire)
   chunkAddBox(chunk, lx, topY + 0.22, lz, mainW * 0.74, 0.44, mainD * 0.74, sharedMat.roof, false, false);
   if(h > 42 && rng() > 0.45) {
     const padSize = Math.min(mainW, mainD) * 0.56;
@@ -469,12 +461,14 @@ function chunkAddSkyscraper(chunk, lx, lz, w, d, h, rng) {
     }
   }
 
+  // Window Grid (Front/Back & Left/Right facades with lit/unlit mix)
   const floorStep = 2.8;
   const startY = podiumH + 1.8;
   const colsZ = Math.max(2, Math.floor((mainW - 1.4) / 2.2));
   const colsX = Math.max(2, Math.floor((mainD - 1.4) / 2.2));
 
   for(let wy = startY; wy < h - 1.2; wy += floorStep) {
+    // Horizontal floor belt trim
     chunkAddBox(chunk, lx, wy - 1.15, lz, mainW + 0.24, 0.16, mainD + 0.24, sharedMat.steelDark, false, false);
 
     for(let c = 0; c < colsZ; c++) {
@@ -503,13 +497,16 @@ function chunkAddSkyscraper(chunk, lx, lz, w, d, h, rng) {
   }
 }
 
+// Detailed Suburban House with Porch, Pitched Roof, Chimney, Framed Windows & Yard Fence
 function chunkAddHouse(chunk, lx, lz, facingZ, rng) {
   const w = 11.5, d = 10.5, h = 4.6;
   const wallMat = sharedMat.housePalette[Math.floor(rng() * sharedMat.housePalette.length)];
   const roofMat = sharedMat.roofPalette[Math.floor(rng() * sharedMat.roofPalette.length)];
 
+  // Main House Body
   chunkAddBox(chunk, lx, h/2, lz, w, h, d, wallMat, true, true);
 
+  // Pitched Hip Roof with Overhang
   const roof = new THREE.Mesh(new THREE.ConeGeometry(8.8, 3.2, 4), roofMat);
   roof.rotation.y = Math.PI / 4;
   roof.position.set(lx, h + 1.55, lz);
@@ -517,8 +514,10 @@ function chunkAddHouse(chunk, lx, lz, facingZ, rng) {
   roof.receiveShadow = true;
   chunk.group.add(roof);
 
+  // Brick Chimney
   chunkAddBox(chunk, lx + 3.6, h + 2.3, lz - 2.2 * facingZ, 1.1, 2.5, 1.1, sharedMat.roofPalette[1], true, false);
 
+  // Front Porch, Steps, Pillars & Door
   const frontZ = lz + facingZ * (d / 2);
   chunkAddBox(chunk, lx, 0.22, frontZ + facingZ * 1.1, 4.4, 0.44, 2.2, sharedMat.sidewalk, true, false);
   chunkAddBox(chunk, lx, 2.75, frontZ + facingZ * 1.1, 4.6, 0.22, 2.3, roofMat, true, false);
@@ -527,12 +526,14 @@ function chunkAddHouse(chunk, lx, lz, facingZ, rng) {
   }
   chunkAddBox(chunk, lx, 1.45, frontZ + facingZ * 0.05, 1.5, 2.3, 0.14, sharedMat.trunk, false, false);
 
+  // Framed Windows with Sills
   for(const sx of [-3.4, 3.4]) {
     chunkAddBox(chunk, lx + sx, 2.5, frontZ + facingZ * 0.06, 2.0, 1.45, 0.1, sharedMat.winLit, false, false);
     chunkAddBox(chunk, lx + sx, 1.72, frontZ + facingZ * 0.12, 2.2, 0.14, 0.24, sharedMat.whiteLine, false, false);
   }
 }
 
+// Detailed Retail Shop with Neon Sign, Striped Awning & Glass Display Front
 function chunkAddShop(chunk, lx, lz, facingZ, rng) {
   const w = 15.0, d = 11.5, h = 6.2;
   const wallMat = sharedMat.buildingPalette[Math.floor(rng() * sharedMat.buildingPalette.length)];
@@ -542,18 +543,22 @@ function chunkAddShop(chunk, lx, lz, facingZ, rng) {
   chunkAddBox(chunk, lx, h + 0.2, lz, w + 0.4, 0.4, d + 0.4, sharedMat.roof, true, false);
 
   const frontZ = lz + facingZ * (d / 2);
+  // Large Storefront Window & Entry Door
   chunkAddBox(chunk, lx - 2.2, 2.0, frontZ + facingZ * 0.06, 6.8, 3.2, 0.12, sharedMat.glassDay, false, false);
   chunkAddBox(chunk, lx + 3.6, 1.75, frontZ + facingZ * 0.06, 2.2, 3.1, 0.14, sharedMat.steelDark, false, false);
 
+  // Awning & Illuminated Signboard
   const awningMat = new THREE.MeshStandardMaterial({color: shopSpec.awning, roughness:0.75});
   chunkAddBox(chunk, lx, 3.9, frontZ + facingZ * 0.95, w * 0.88, 0.38, 1.85, awningMat, true, false);
   chunkAddBox(chunk, lx, 5.15, frontZ + facingZ * 0.14, 7.6, 1.25, 0.22, shopSpec.mat, false, false);
 }
 
+// Highway Overhead Directional Gantry spanning across the 28m highway (supports strictly outside roadbed)
 function chunkAddHighwayGantry(chunk, lx, lz, alongX) {
-  const span = HIGHWAY_HALF_W * 2 + 2.6;
+  const span = HIGHWAY_HALF_W * 2 + 2.6; // 30.6m span so pillars sit in the sidewalk buffer
   const pillarOffset = span / 2;
   if(alongX) {
+    // Highway runs East-West (along X), gantry spans North-South (along Z)
     chunkAddBox(chunk, lx, 3.6, lz - pillarOffset, 0.45, 7.2, 0.45, sharedMat.steelLight, true, false);
     chunkAddBox(chunk, lx, 3.6, lz + pillarOffset, 0.45, 7.2, 0.45, sharedMat.steelLight, true, false);
     chunk.cylinders.push({ x: chunk.worldX + lx, z: chunk.worldZ + lz - pillarOffset, r: 0.35 });
@@ -562,6 +567,7 @@ function chunkAddHighwayGantry(chunk, lx, lz, alongX) {
     chunkAddBox(chunk, lx, 6.7, lz - 6.5, 0.25, 1.8, 8.5, sharedMat.gantryGreen, true, false);
     chunkAddBox(chunk, lx, 6.7, lz + 6.5, 0.25, 1.8, 8.5, sharedMat.gantryGreen, true, false);
   } else {
+    // Highway runs North-South (along Z), gantry spans East-West (along X)
     chunkAddBox(chunk, lx - pillarOffset, 3.6, lz, 0.45, 7.2, 0.45, sharedMat.steelLight, true, false);
     chunkAddBox(chunk, lx + pillarOffset, 3.6, lz, 0.45, 7.2, 0.45, sharedMat.steelLight, true, false);
     chunk.cylinders.push({ x: chunk.worldX + lx - pillarOffset, z: chunk.worldZ + lz, r: 0.35 });
@@ -594,12 +600,14 @@ function buildChunk(cx, cz) {
 
   const rng = mulberry32(hashChunk(cx, cz, 1));
 
+  // 1. Base Grass Terrain Tile (120m x 120m)
   const ground = new THREE.Mesh(new THREE.PlaneGeometry(CHUNK_SIZE, CHUNK_SIZE), sharedMat.grass);
   ground.rotation.x = -Math.PI / 2;
   ground.position.y = -0.06;
   ground.receiveShadow = true;
   group.add(ground);
 
+  // Boundary road widths for West (cx), East (cx+1), North (cz), South (cz+1)
   const westHalfW  = getBoundaryHalfWidth(cx);
   const eastHalfW  = getBoundaryHalfWidth(cx + 1);
   const northHalfW = getBoundaryHalfWidth(cz);
@@ -610,11 +618,17 @@ function buildChunk(cx, cz) {
   const northType = getBoundaryRoadType(cz);
   const southType = getBoundaryRoadType(cz + 1);
 
+  // 2. Render Half-Width Boundary Roads (West & East edges at lx = -60, +60; North & South at lz = -60, +60)
+  // West Boundary Strip (x from -60 to -60 + westHalfW)
   chunkAddBox(chunk, -HALF_CHUNK + westHalfW/2, 0.0, 0, westHalfW, 0.08, CHUNK_SIZE, sharedMat.road, false, false);
+  // East Boundary Strip (x from +60 - eastHalfW to +60)
   chunkAddBox(chunk,  HALF_CHUNK - eastHalfW/2, 0.0, 0, eastHalfW, 0.08, CHUNK_SIZE, sharedMat.road, false, false);
+  // North Boundary Strip (z from -60 to -60 + northHalfW)
   chunkAddBox(chunk, 0, 0.0, -HALF_CHUNK + northHalfW/2, CHUNK_SIZE, 0.08, northHalfW, sharedMat.road, false, false);
+  // South Boundary Strip (z from +60 - southHalfW to +60)
   chunkAddBox(chunk, 0, 0.0,  HALF_CHUNK - southHalfW/2, CHUNK_SIZE, 0.08, southHalfW, sharedMat.road, false, false);
 
+  // 3. Render Central Local Neighborhood Streets (Cross at lx = 0 and lz = 0, width 9m)
   const localSpanXStart = -HALF_CHUNK + westHalfW;
   const localSpanXEnd   =  HALF_CHUNK - eastHalfW;
   const localSpanZStart = -HALF_CHUNK + northHalfW;
@@ -623,17 +637,22 @@ function buildChunk(cx, cz) {
   chunkAddBox(chunk, (localSpanXStart + localSpanXEnd)/2, 0.002, 0, localSpanXEnd - localSpanXStart, 0.08, LOCAL_HALF_W * 2, sharedMat.road, false, false);
   chunkAddBox(chunk, 0, 0.002, (localSpanZStart + localSpanZEnd)/2, LOCAL_HALF_W * 2, 0.08, localSpanZEnd - localSpanZStart, sharedMat.road, false, false);
 
+  // 4. Lane Markings, Highway Jersey Barriers & Overhead Gantries
+  // West & North boundary centerlines (drawn only on West & North edges so adjacent chunks don't Z-fight)
   if(westType === 'HIGHWAY') {
+    // Center concrete Jersey barrier along lx = -60 (outside intersection core)
     for(let p = -HALF_CHUNK + northHalfW + 4; p <= HALF_CHUNK - southHalfW - 4; p += 12) {
       if(Math.abs(p) < LOCAL_HALF_W + 3) continue;
       chunkAddBox(chunk, -HALF_CHUNK, 0.45, p, 0.65, 0.9, 10.5, sharedMat.jerseyBarrier, true, true);
     }
+    // White lane dashes at ±6.5m from highway center
     for(let p = -HALF_CHUNK + northHalfW + 3; p < HALF_CHUNK - southHalfW - 3; p += 10) {
       if(Math.abs(p) < LOCAL_HALF_W + 2) continue;
       chunkAddBox(chunk, -HALF_CHUNK + 6.5, 0.05, p, 0.22, 0.02, 4.5, sharedMat.whiteLine, false, false);
     }
     if(Math.abs(cz) % 2 === 1) chunkAddHighwayGantry(chunk, -HALF_CHUNK, 24, false);
   } else {
+    // Avenue double yellow centerline at lx = -60 + 0.22
     for(let p = -HALF_CHUNK + northHalfW + 2; p < HALF_CHUNK - southHalfW - 2; p += 8) {
       if(Math.abs(p) < LOCAL_HALF_W + 1.5) continue;
       chunkAddBox(chunk, -HALF_CHUNK + 0.22, 0.05, p, 0.16, 0.02, 6.5, sharedMat.yellowLine, false, false);
@@ -669,6 +688,7 @@ function buildChunk(cx, cz) {
     }
   }
 
+  // Local street dashed white centerlines
   for(let p = localSpanXStart + 3; p < localSpanXEnd - 3; p += 9) {
     if(Math.abs(p) < LOCAL_HALF_W + 1.5) continue;
     chunkAddBox(chunk, p, 0.05, 0, 4.0, 0.02, 0.16, sharedMat.whiteLine, false, false);
@@ -678,29 +698,30 @@ function buildChunk(cx, cz) {
     chunkAddBox(chunk, 0, 0.05, p, 0.16, 0.02, 4.0, sharedMat.whiteLine, false, false);
   }
 
+  // 5. Compute the 4 Exact Interior Quadrant Bounds (Strictly Bounded Inside Road Curbs!)
   const quadrants = [
-    {
+    { // North-West Quadrant
       minX: -HALF_CHUNK + westHalfW,
       maxX: -LOCAL_HALF_W,
       minZ: -HALF_CHUNK + northHalfW,
       maxZ: -LOCAL_HALF_W,
-      roadFaceZ: 1
+      roadFaceZ: 1 // Faces South (+Z) onto local street
     },
-    {
+    { // North-East Quadrant
       minX: LOCAL_HALF_W,
       maxX: HALF_CHUNK - eastHalfW,
       minZ: -HALF_CHUNK + northHalfW,
       maxZ: -LOCAL_HALF_W,
       roadFaceZ: 1
     },
-    {
+    { // South-West Quadrant
       minX: -HALF_CHUNK + westHalfW,
       maxX: -LOCAL_HALF_W,
       minZ: LOCAL_HALF_W,
       maxZ: HALF_CHUNK - southHalfW,
-      roadFaceZ: -1
+      roadFaceZ: -1 // Faces North (-Z) onto local street
     },
-    {
+    { // South-East Quadrant
       minX: LOCAL_HALF_W,
       maxX: HALF_CHUNK - eastHalfW,
       minZ: LOCAL_HALF_W,
@@ -709,17 +730,21 @@ function buildChunk(cx, cz) {
     }
   ];
 
+  // 6. Build Sidewalk Perimeters, Streetlamps & Strict Interior Buildable Lots for Each Quadrant
   quadrants.forEach((q, qIdx) => {
     const qw = q.maxX - q.minX;
     const qd = q.maxZ - q.minZ;
     const qcx = (q.minX + q.maxX) / 2;
     const qcz = (q.minZ + q.maxZ) / 2;
 
+    // Raised Concrete Sidewalk Platform covering the quadrant perimeter
     chunkAddBox(chunk, qcx, 0.08, qcz, qw, 0.16, qd, sharedMat.sidewalk, false, false);
 
+    // Streetlamps strictly on sidewalk corners (inset 0.75m from curb so never on road)
     chunkAddLamp(chunk, q.minX + 0.75, q.minZ + 0.75,  1,  0);
     chunkAddLamp(chunk, q.maxX - 0.75, q.maxZ - 0.75, -1,  0);
 
+    // Strict Interior Lot Bounds (guaranteed >= 5.8m away from every road edge!)
     const lotMinX = q.minX + SIDEWALK_W + LOT_SAFETY_PAD;
     const lotMaxX = q.maxX - SIDEWALK_W - LOT_SAFETY_PAD;
     const lotMinZ = q.minZ + SIDEWALK_W + LOT_SAFETY_PAD;
@@ -731,11 +756,14 @@ function buildChunk(cx, cz) {
 
     if(lotW < 10 || lotD < 10) return;
 
+    // Populate Interior Lot based on Chunk District Zoning
     if(chunk.district === 'PARK' || (cx === 0 && cz === 0 && qIdx === 3)) {
+      // Lush Urban Park with manicured lawn, pathways, and multi-layered trees
       chunkAddBox(chunk, lotCX, 0.17, lotCZ, lotW, 0.06, lotD, sharedMat.parkGrass, false, false);
       chunkAddBox(chunk, lotCX, 0.18, lotCZ, lotW, 0.07, 2.4, sharedMat.sidewalk, false, false);
       chunkAddBox(chunk, lotCX, 0.18, lotCZ, 2.4, 0.07, lotD, sharedMat.sidewalk, false, false);
 
+      // Place 6 trees strictly inside the park lawn (padded from edges and paths)
       const treeOffsets = [
         [-0.32, -0.32], [0.32, -0.32],
         [-0.32,  0.32], [0.32,  0.32],
@@ -747,6 +775,7 @@ function buildChunk(cx, cz) {
         chunkAddTree(chunk, tx, tz, 0.85 + rng() * 0.35, rng);
       }
     } else if(chunk.district === 'DOWNTOWN') {
+      // High-Rise Skyscraper or Twin Modern Office Towers
       if(lotW > 26 && rng() > 0.45) {
         const subW = (lotW - 3.5) / 2;
         const subD = Math.min(lotD - 2.0, 22);
@@ -757,9 +786,11 @@ function buildChunk(cx, cz) {
         const bD = Math.min(lotD - 2.0, 24);
         chunkAddSkyscraper(chunk, lotCX, lotCZ, bW, bD, 32 + rng() * 42, rng);
       }
+      // Corner decorative plaza trees strictly inside the lot
       chunkAddTree(chunk, lotMinX + 1.4, lotMinZ + 1.4, 0.78, rng);
       chunkAddTree(chunk, lotMaxX - 1.4, lotMaxZ - 1.4, 0.78, rng);
     } else if(chunk.district === 'COMMERCIAL') {
+      // Vibrant Retail Strip Shops facing the local neighborhood street
       if(lotW > 32) {
         chunkAddShop(chunk, lotMinX + 8.0, lotCZ, q.roadFaceZ, rng);
         chunkAddShop(chunk, lotMaxX - 8.0, lotCZ, q.roadFaceZ, rng);
@@ -768,6 +799,7 @@ function buildChunk(cx, cz) {
       }
       chunkAddTree(chunk, lotCX, lotCZ - q.roadFaceZ * (lotD * 0.36), 0.85, rng);
     } else {
+      // Suburban Residential Neighborhood (2 Detailed Houses + Front Lawn Trees)
       chunkAddBox(chunk, lotCX, 0.165, lotCZ, lotW, 0.04, lotD, sharedMat.parkGrass, false, false);
       if(lotW > 26) {
         chunkAddHouse(chunk, lotMinX + 6.4, lotCZ, q.roadFaceZ, rng);
@@ -788,6 +820,7 @@ function unloadChunk(key) {
   const chunk = activeChunks.get(key);
   if(!chunk) return;
   scene.remove(chunk.group);
+  // Dispose unique per-chunk geometries while preserving shared materials/textures
   chunk.group.traverse(obj => {
     if(obj.isMesh && obj.geometry) {
       obj.geometry.dispose();
@@ -833,8 +866,10 @@ function updateChunkStreaming(wx, wz, force=false) {
 }
 
 // ============================================================================
-// ARTICULATED THIRD-PERSON & FIRST-PERSON CHARACTER MODEL + REUSABLE FACTORY
+// ARTICULATED THIRD-PERSON & FIRST-PERSON CHARACTER MODEL
 // ============================================================================
+const player = new THREE.Group(); scene.add(player);
+const playerModel = new THREE.Group(); player.add(playerModel);
 const skinMat = new THREE.MeshStandardMaterial({color:0xc58e70,roughness:.88});
 const skinLightMat = new THREE.MeshStandardMaterial({color:0xd3a184,roughness:.9});
 const jacketMat = new THREE.MeshStandardMaterial({color:0x263f59,roughness:.82});
@@ -860,87 +895,69 @@ function addCharacterMesh(parent, geometry, material, position, scale=null) {
 function addCharacterCapsule(parent, radius, length, material, position, scale=null) {
   return addCharacterMesh(parent,new THREE.CapsuleGeometry(radius,length,5,12),material,position,scale);
 }
-
-// Reusable articulated character builder used for both local player and multiplayer peers
-function createCharacterModel(customJacketHex=null) {
-  const model = new THREE.Group();
-  const coatMat = customJacketHex
-    ? new THREE.MeshStandardMaterial({color:customJacketHex, roughness:.82})
-    : jacketMat;
-  const coatDarkMat = customJacketHex
-    ? new THREE.MeshStandardMaterial({color:new THREE.Color(customJacketHex).multiplyScalar(0.68), roughness:.86})
-    : jacketDarkMat;
-
-  addCharacterMesh(model,new THREE.SphereGeometry(1,20,16),denimMat,[0,.89,0],[.285,.22,.18]);
-  const torsoPoints=[
-    new THREE.Vector2(.205,.82),new THREE.Vector2(.255,.91),new THREE.Vector2(.265,1.08),
-    new THREE.Vector2(.315,1.27),new THREE.Vector2(.375,1.43),new THREE.Vector2(.35,1.54),
-    new THREE.Vector2(.245,1.62),new THREE.Vector2(.16,1.65)
-  ];
-  addCharacterMesh(model,new THREE.LatheGeometry(torsoPoints,24),coatMat,[0,0,0]);
-  addCharacterMesh(model,new THREE.CylinderGeometry(.115,.115,.12,16),skinMat,[0,1.65,0]);
-  addCharacterMesh(model,new THREE.BoxGeometry(.13,.15,.035),shirtMat,[0,1.56,-.185]);
-  addCharacterMesh(model,new THREE.BoxGeometry(.025,.56,.018),metalDetailMat,[0,1.24,-.317]);
-  for(const side of [-1,1]) {
-    addCharacterMesh(model,new THREE.BoxGeometry(.12,.16,.025),coatDarkMat,[side*.205,1.25,-.31]);
-    addCharacterMesh(model,new THREE.BoxGeometry(.10,.035,.018),metalDetailMat,[side*.205,1.31,-.328]);
-    addCharacterMesh(model,new THREE.BoxGeometry(.11,.045,.025),coatDarkMat,[side*.205,1.47,-.30]);
-  }
-  addCharacterMesh(model,new THREE.BoxGeometry(.48,.065,.36),coatDarkMat,[0,.91,0]);
-  addCharacterMesh(model,new THREE.CylinderGeometry(.105,.12,.19,16),skinMat,[0,1.69,0]);
-  addCharacterMesh(model,new THREE.SphereGeometry(1,28,22),skinLightMat,[0,1.91,-.005],[.235,.285,.215]);
-  for(const side of [-1,1]) {
-    addCharacterMesh(model,new THREE.SphereGeometry(1,14,12),skinMat,[side*.231,1.91,-.005],[.055,.09,.045]);
-    addCharacterMesh(model,new THREE.SphereGeometry(1,14,12),eyeWhiteMat,[side*.086,1.955,-.190],[.046,.034,.022]);
-    addCharacterMesh(model,new THREE.SphereGeometry(1,12,10),irisMat,[side*.086,1.954,-.210],[.022,.025,.012]);
-    addCharacterMesh(model,new THREE.SphereGeometry(1,10,8),pupilMat,[side*.086,1.954,-.220],[.010,.016,.007]);
-    addCharacterMesh(model,new THREE.BoxGeometry(.095,.018,.025),hairMat,[side*.087,2.012,-.187]);
-  }
-  addCharacterMesh(model,new THREE.SphereGeometry(1,12,10),skinMat,[0,1.885,-.221],[.035,.052,.045]);
-  addCharacterMesh(model,new THREE.BoxGeometry(.065,.012,.012),detailDarkMat,[0,1.785,-.211]);
-  addCharacterMesh(model,new THREE.SphereGeometry(1,24,16),hairMat,[0,2.105,.025],[.245,.135,.225]);
-  for(let i=0;i<5;i++) {
-    const x=(i-2)*.075;
-    addCharacterMesh(model,new THREE.SphereGeometry(1,12,10),hairMat,[x,2.045,-.155+Math.abs(i-2)*.006],[.065,.075,.09]);
-  }
-  const armPivots=[], forearmPivots=[];
-  for(const side of [-1,1]) {
-    const arm=new THREE.Group(); arm.position.set(side*.385,1.51,0); model.add(arm); armPivots.push(arm);
-    addCharacterMesh(arm,new THREE.SphereGeometry(1,16,12),coatMat,[0,-.035,0],[.145,.155,.145]);
-    addCharacterCapsule(arm,.115,.31,coatMat,[0,-.235,0]);
-    addCharacterMesh(arm,new THREE.SphereGeometry(1,14,12),coatDarkMat,[0,-.405,0],[.113,.105,.115]);
-    const elbow=new THREE.Group(); elbow.position.set(0,-.43,0); arm.add(elbow); forearmPivots.push(elbow);
-    addCharacterCapsule(elbow,.085,.285,coatMat,[0,-.19,0]);
-    addCharacterMesh(elbow,new THREE.CylinderGeometry(.087,.09,.075,12),coatDarkMat,[0,-.355,0]);
-    const hand=new THREE.Group(); hand.position.set(0,-.405,-.005); elbow.add(hand);
-    addCharacterMesh(hand,new THREE.SphereGeometry(1,14,12),skinMat,[0,-.035,-.005],[.082,.105,.055]);
-    for(let f=0;f<4;f++) {
-      const fx=(f-1.5)*.033;
-      addCharacterCapsule(hand,.014,.065,skinLightMat,[fx,-.115,-.025]);
-    }
-    addCharacterMesh(hand,new THREE.SphereGeometry(1,10,8),skinMat,[side*.085,-.055,-.005],[.035,.055,.035]);
-  }
-  const legPivots=[], kneePivots=[];
-  for(const side of [-1,1]) {
-    const leg=new THREE.Group(); leg.position.set(side*.145,.88,0); model.add(leg); legPivots.push(leg);
-    addCharacterCapsule(leg,.132,.30,denimMat,[0,-.205,0]);
-    addCharacterMesh(leg,new THREE.SphereGeometry(1,14,12),denimLightMat,[0,-.37,-.005],[.133,.12,.137]);
-    const knee=new THREE.Group(); knee.position.set(0,-.40,0); leg.add(knee); kneePivots.push(knee);
-    addCharacterCapsule(knee,.105,.255,denimMat,[0,-.175,0]);
-    addCharacterMesh(knee,new THREE.SphereGeometry(1,14,12),denimMat,[0,-.31,0],[.108,.11,.115]);
-    addCharacterMesh(knee,new THREE.BoxGeometry(.07,.15,.012),denimLightMat,[side*.035,-.19,-.104]);
-    addCharacterMesh(knee,new THREE.BoxGeometry(.235,.13,.37),shoeMat,[0,-.385,-.075]);
-    addCharacterMesh(knee,new THREE.BoxGeometry(.24,.045,.38),soleMat,[0,-.448,-.075]);
-    for(let lace=0;lace<3;lace++) addCharacterMesh(knee,new THREE.BoxGeometry(.105,.012,.014),metalDetailMat,[0,-.345,-.205+lace*.055]);
-  }
-  return { model, rig: {armPivots, forearmPivots, legPivots, kneePivots} };
+addCharacterMesh(playerModel,new THREE.SphereGeometry(1,20,16),denimMat,[0,.89,0],[.285,.22,.18]);
+const torsoPoints=[
+  new THREE.Vector2(.205,.82),new THREE.Vector2(.255,.91),new THREE.Vector2(.265,1.08),
+  new THREE.Vector2(.315,1.27),new THREE.Vector2(.375,1.43),new THREE.Vector2(.35,1.54),
+  new THREE.Vector2(.245,1.62),new THREE.Vector2(.16,1.65)
+];
+addCharacterMesh(playerModel,new THREE.LatheGeometry(torsoPoints,24),jacketMat,[0,0,0]);
+addCharacterMesh(playerModel,new THREE.CylinderGeometry(.115,.115,.12,16),skinMat,[0,1.65,0]);
+addCharacterMesh(playerModel,new THREE.BoxGeometry(.13,.15,.035),shirtMat,[0,1.56,-.185]);
+addCharacterMesh(playerModel,new THREE.BoxGeometry(.025,.56,.018),metalDetailMat,[0,1.24,-.317]);
+for(const side of [-1,1]) {
+  addCharacterMesh(playerModel,new THREE.BoxGeometry(.12,.16,.025),jacketDarkMat,[side*.205,1.25,-.31]);
+  addCharacterMesh(playerModel,new THREE.BoxGeometry(.10,.035,.018),metalDetailMat,[side*.205,1.31,-.328]);
+  addCharacterMesh(playerModel,new THREE.BoxGeometry(.11,.045,.025),jacketDarkMat,[side*.205,1.47,-.30]);
 }
-
-const player = new THREE.Group(); scene.add(player);
-const localChar = createCharacterModel();
-const playerModel = localChar.model;
-player.add(playerModel);
-const characterRig = localChar.rig;
+addCharacterMesh(playerModel,new THREE.BoxGeometry(.48,.065,.36),jacketDarkMat,[0,.91,0]);
+addCharacterMesh(playerModel,new THREE.CylinderGeometry(.105,.12,.19,16),skinMat,[0,1.69,0]);
+addCharacterMesh(playerModel,new THREE.SphereGeometry(1,28,22),skinLightMat,[0,1.91,-.005],[.235,.285,.215]);
+for(const side of [-1,1]) {
+  addCharacterMesh(playerModel,new THREE.SphereGeometry(1,14,12),skinMat,[side*.231,1.91,-.005],[.055,.09,.045]);
+  addCharacterMesh(playerModel,new THREE.SphereGeometry(1,14,12),eyeWhiteMat,[side*.086,1.955,-.190],[.046,.034,.022]);
+  addCharacterMesh(playerModel,new THREE.SphereGeometry(1,12,10),irisMat,[side*.086,1.954,-.210],[.022,.025,.012]);
+  addCharacterMesh(playerModel,new THREE.SphereGeometry(1,10,8),pupilMat,[side*.086,1.954,-.220],[.010,.016,.007]);
+  addCharacterMesh(playerModel,new THREE.BoxGeometry(.095,.018,.025),hairMat,[side*.087,2.012,-.187]);
+}
+addCharacterMesh(playerModel,new THREE.SphereGeometry(1,12,10),skinMat,[0,1.885,-.221],[.035,.052,.045]);
+addCharacterMesh(playerModel,new THREE.BoxGeometry(.065,.012,.012),detailDarkMat,[0,1.785,-.211]);
+addCharacterMesh(playerModel,new THREE.SphereGeometry(1,24,16),hairMat,[0,2.105,.025],[.245,.135,.225]);
+for(let i=0;i<5;i++) {
+  const x=(i-2)*.075;
+  addCharacterMesh(playerModel,new THREE.SphereGeometry(1,12,10),hairMat,[x,2.045,-.155+Math.abs(i-2)*.006],[.065,.075,.09]);
+}
+const armPivots=[], forearmPivots=[];
+for(const side of [-1,1]) {
+  const arm=new THREE.Group(); arm.position.set(side*.385,1.51,0); playerModel.add(arm); armPivots.push(arm);
+  addCharacterMesh(arm,new THREE.SphereGeometry(1,16,12),jacketMat,[0,-.035,0],[.145,.155,.145]);
+  addCharacterCapsule(arm,.115,.31,jacketMat,[0,-.235,0]);
+  addCharacterMesh(arm,new THREE.SphereGeometry(1,14,12),jacketDarkMat,[0,-.405,0],[.113,.105,.115]);
+  const elbow=new THREE.Group(); elbow.position.set(0,-.43,0); arm.add(elbow); forearmPivots.push(elbow);
+  addCharacterCapsule(elbow,.085,.285,jacketMat,[0,-.19,0]);
+  addCharacterMesh(elbow,new THREE.CylinderGeometry(.087,.09,.075,12),jacketDarkMat,[0,-.355,0]);
+  const hand=new THREE.Group(); hand.position.set(0,-.405,-.005); elbow.add(hand);
+  addCharacterMesh(hand,new THREE.SphereGeometry(1,14,12),skinMat,[0,-.035,-.005],[.082,.105,.055]);
+  for(let f=0;f<4;f++) {
+    const fx=(f-1.5)*.033;
+    addCharacterCapsule(hand,.014,.065,skinLightMat,[fx,-.115,-.025]);
+  }
+  addCharacterMesh(hand,new THREE.SphereGeometry(1,10,8),skinMat,[side*.085,-.055,-.005],[.035,.055,.035]);
+}
+const legPivots=[], kneePivots=[];
+for(const side of [-1,1]) {
+  const leg=new THREE.Group(); leg.position.set(side*.145,.88,0); playerModel.add(leg); legPivots.push(leg);
+  addCharacterCapsule(leg,.132,.30,denimMat,[0,-.205,0]);
+  addCharacterMesh(leg,new THREE.SphereGeometry(1,14,12),denimLightMat,[0,-.37,-.005],[.133,.12,.137]);
+  const knee=new THREE.Group(); knee.position.set(0,-.40,0); leg.add(knee); kneePivots.push(knee);
+  addCharacterCapsule(knee,.105,.255,denimMat,[0,-.175,0]);
+  addCharacterMesh(knee,new THREE.SphereGeometry(1,14,12),denimMat,[0,-.31,0],[.108,.11,.115]);
+  addCharacterMesh(knee,new THREE.BoxGeometry(.07,.15,.012),denimLightMat,[side*.035,-.19,-.104]);
+  addCharacterMesh(knee,new THREE.BoxGeometry(.235,.13,.37),shoeMat,[0,-.385,-.075]);
+  addCharacterMesh(knee,new THREE.BoxGeometry(.24,.045,.38),soleMat,[0,-.448,-.075]);
+  for(let lace=0;lace<3;lace++) addCharacterMesh(knee,new THREE.BoxGeometry(.105,.012,.014),metalDetailMat,[0,-.345,-.205+lace*.055]);
+}
+const characterRig={armPivots,forearmPivots,legPivots,kneePivots};
 
 // Spawn player cleanly on the central neighborhood sidewalk next to the starter sports coupe!
 player.position.set(6.2, 0.16, 12.0);
@@ -1022,6 +1039,7 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
     cabin.position.set(0, 1.66, -0.45); cabin.castShadow = true; chassis.add(cabin);
     const roof = new THREE.Mesh(new THREE.BoxGeometry(1.98, 0.14, 2.85), paint);
     roof.position.set(0, 2.12, -0.48); chassis.add(roof);
+    // Roof rails
     for(const sx of [-0.82, 0.82]) {
       const rail = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.10, 2.5), chrome);
       rail.position.set(sx, 2.22, -0.48); chassis.add(rail);
@@ -1035,6 +1053,7 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
     const cargoBox = new THREE.Mesh(new THREE.BoxGeometry(2.22, 1.18, 3.15), paint);
     cargoBox.position.set(0, 1.82, -0.75); cargoBox.castShadow = true; chassis.add(cargoBox);
   } else {
+    // SPORT or SEDAN
     const isSport = archetype === 'SPORT';
     bodyW = isSport ? 2.18 : 2.14;
     bodyL = isSport ? 4.32 : 4.42;
@@ -1043,6 +1062,7 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
     const body = new THREE.Mesh(new THREE.BoxGeometry(bodyW, 0.70, bodyL), paint);
     body.position.y = 0.76; body.castShadow = true; body.receiveShadow = true; chassis.add(body);
 
+    // Sculpted Hood & Front Splitter
     const hood = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.86, 0.10, 1.35), paint);
     hood.position.set(0, 1.12, 1.28); hood.rotation.x = 0.05; chassis.add(hood);
 
@@ -1053,6 +1073,7 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
     roof.position.set(0, 1.82, -0.25); chassis.add(roof);
 
     if(isSport) {
+      // Rear Carbon Wing Spoiler
       const wing = new THREE.Mesh(new THREE.BoxGeometry(2.04, 0.07, 0.34), bumperMat);
       wing.position.set(0, 1.38, -1.98); chassis.add(wing);
       for(const sx of [-0.68, 0.68]) {
@@ -1062,6 +1083,7 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
     }
   }
 
+  // Front & Rear Bumpers, Grille, Dual Exhausts & Side Mirrors
   const halfZ = bodyL / 2;
   const frontBumper = new THREE.Mesh(new THREE.BoxGeometry(bodyW + 0.04, 0.22, 0.18), bumperMat);
   frontBumper.position.set(0, 0.46, halfZ + 0.02); chassis.add(frontBumper);
@@ -1076,11 +1098,13 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
     mirror.position.set(sx * (bodyW/2 + 0.06), 1.36, 0.65); chassis.add(mirror);
     const handle = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.045, 0.035), chrome);
     handle.position.set(sx * (bodyW/2 + 0.01), 0.98, -0.15); chassis.add(handle);
+    // Dual Chrome Exhaust Tips
     const exhaust = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.22, 10), chrome);
     exhaust.rotation.x = Math.PI / 2;
     exhaust.position.set(sx * 0.62, 0.38, -halfZ - 0.06); chassis.add(exhaust);
   }
 
+  // Detailed Alloy Wheels & Red Brake Calipers
   const wheelMat = new THREE.MeshStandardMaterial({color:0x14181c, roughness:0.75});
   const wheelMeshes = [], steerPivots = [];
   const wheelZ = bodyL * 0.32;
@@ -1106,6 +1130,7 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
     wheelMeshes.push(wheel);
   }
 
+  // Headlights & Taillights
   const lightMat = new THREE.MeshBasicMaterial({color:0xfff5d6});
   const brakeLights = [];
   for(const sx of [-0.72, 0.72]) {
@@ -1140,15 +1165,16 @@ function makeCar(x, z, headingY=0, color=0x287fbd, archetype='SPORT') {
   };
 }
 
+// Spawn Fleet of Detailed Vehicles Strictly in Clear Road Lanes!
 const cars = [
-  makeCar( 2.2,  14.0, 0,           0x287fbd, 'SPORT'),
+  makeCar( 2.2,  14.0, 0,           0x287fbd, 'SPORT'), // Right outside player spawn!
   makeCar(-2.2, -18.0, Math.PI,     0xd2a343, 'SEDAN'),
   makeCar( 24.0,  2.2, -Math.PI/2,  0x4c9a68, 'SUV'),
   makeCar(-28.0, -2.2, Math.PI/2,   0xc84b31, 'SPORT'),
-  makeCar( 62.2, 22.0, 0,           0xe2e8f0, 'VAN'),
-  makeCar(-62.2,-25.0, Math.PI,     0x7c3aed, 'SPORT'),
-  makeCar( 22.0, 62.2, -Math.PI/2,  0x0ea5e9, 'SEDAN'),
-  makeCar(-18.0,-62.2, Math.PI/2,   0xf59e0b, 'SUV')
+  makeCar( 62.2, 22.0, 0,           0xe2e8f0, 'VAN'),   // Avenue lane
+  makeCar(-62.2,-25.0, Math.PI,     0x7c3aed, 'SPORT'), // Avenue lane
+  makeCar( 22.0, 62.2, -Math.PI/2,  0x0ea5e9, 'SEDAN'), // Avenue lane
+  makeCar(-18.0,-62.2, Math.PI/2,   0xf59e0b, 'SUV')    // Avenue lane
 ];
 let activeCar = null;
 
@@ -1161,7 +1187,6 @@ let mouseLocked = false, running = false, clock = new THREE.Clock();
 const playerRadius = 0.48;
 
 function onKey(e, down) {
-  if(document.activeElement && document.activeElement.tagName === 'INPUT') return;
   const k = e.key.toLowerCase();
   keys[k] = down;
   if([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
@@ -1187,7 +1212,6 @@ document.addEventListener('mousemove', e => {
 
 function toggleCar() {
   if(inCar) {
-    const exitedIdx = cars.indexOf(activeCar);
     activeCar.headlights.forEach(hl => hl.intensity = 0);
     const heading = activeCar.root.rotation.y;
     const rightX = Math.cos(heading), rightZ = -Math.sin(heading);
@@ -1196,8 +1220,9 @@ function toggleCar() {
       0.16,
       activeCar.root.position.z - rightZ * 2.25
     );
+    const exitedIndex = cars.indexOf(activeCar);
     inCar = false; activeCar = null; player.visible = true;
-    mpReleaseVehicle(exitedIdx);
+    mpSetCarOwner(exitedIndex, null);
     toast('Exited vehicle');
   } else {
     let nearest = null, dist = 5.5;
@@ -1206,16 +1231,16 @@ function toggleCar() {
       if(d < dist) { nearest = c; dist = d; }
     }
     if(nearest) {
-      const carIdx = cars.indexOf(nearest);
-      if(mpIsVehicleOccupied(carIdx)) {
-        const driverName = mpGetVehicleDriverName(carIdx);
-        toast(`Vehicle occupied by ${driverName}`);
+      const nearestIndex = cars.indexOf(nearest);
+      const currentOwner = mpCarOwners.get(nearestIndex);
+      if(mpStarted && currentOwner && currentOwner !== mpLocalPeerId) {
+        toast('That vehicle is currently being driven by another player');
         return;
       }
       activeCar = nearest; inCar = true; player.visible = false;
+      if(mpStarted) mpSetCarOwner(nearestIndex, mpLocalPeerId);
       if(!isDayMode) activeCar.headlights.forEach(hl => hl.intensity = 5.4);
       yaw = nearest.root.rotation.y;
-      mpClaimVehicle(carIdx);
       toast('Vehicle entered · Hold SPACE while turning to drift');
     } else {
       toast('Move closer to a vehicle to enter it');
@@ -1225,12 +1250,11 @@ function toggleCar() {
 
 function resetPosition() {
   if(inCar && activeCar) {
-    const exitedIdx = cars.indexOf(activeCar);
     activeCar.root.position.set(2.2, 0, 14.0);
     activeCar.root.rotation.set(0, 0, 0);
     activeCar.vx = 0; activeCar.vz = 0; activeCar.angularVel = 0; activeCar.steerAngle = 0;
-    mpReleaseVehicle(exitedIdx);
   }
+  if(activeCar) mpSetCarOwner(cars.indexOf(activeCar), null);
   inCar = false; activeCar = null; player.visible = true;
   player.position.set(6.2, 0.16, 12.0);
   verticalVelocity = 0; yaw = 0;
@@ -1240,6 +1264,8 @@ function resetPosition() {
 
 // ============================================================================
 // CHUNK-SCOPED SOLID-BODY COLLISION PHYSICS ENGINE
+// Only checks chunks immediately adjacent to the entity (3x3 chunk neighborhood)
+// so physics stays 60+ FPS regardless of how vast the metropolis becomes!
 // ============================================================================
 function getNearbyChunks(wx, wz) {
   const cx = Math.round(wx / CHUNK_SIZE);
@@ -1275,6 +1301,7 @@ function resolveCircleWorld(x, z, r) {
   const nearby = getNearbyChunks(cx, cz);
 
   for(const ch of nearby) {
+    // 1. Static Buildings / Houses / Shops / Jersey Barriers
     for(const b of ch.colliders) {
       if(b.maxY < 0 || b.minY > 3.4) continue;
       const px = THREE.MathUtils.clamp(cx, b.minX, b.maxX);
@@ -1291,6 +1318,7 @@ function resolveCircleWorld(x, z, r) {
       }
     }
 
+    // 2. Tree Trunks, Streetlamps & Gantry Pillars
     for(const cyl of ch.cylinders) {
       const dx = cx - cyl.x, dz = cz - cyl.z;
       const minDist = r + cyl.r;
@@ -1306,6 +1334,7 @@ function resolveCircleWorld(x, z, r) {
     }
   }
 
+  // 3. Solid Cars (OBBs)
   for(const c of cars) {
     const obb = getCarOBB(c);
     const relX = cx - obb.cx, relZ = cz - obb.cz;
@@ -1480,15 +1509,8 @@ function resolveCarToCarCollisions() {
 // ============================================================================
 // PLAYER, VEHICLE & CAMERA UPDATE LOOPS
 // ============================================================================
-let localAnimState = { moving: false, sprinting: false, airborne: false };
-
 function updatePlayer(dt) {
-  if(inCar) {
-    localAnimState.moving = false;
-    localAnimState.sprinting = false;
-    localAnimState.airborne = false;
-    return;
-  }
+  if(inCar) return;
   let forward = (keys.w||keys.arrowup?1:0) - (keys.s||keys.arrowdown?1:0);
   let side = (keys.d||keys.arrowright?1:0) - (keys.a||keys.arrowleft?1:0);
   const len = Math.hypot(forward, side);
@@ -1505,10 +1527,6 @@ function updatePlayer(dt) {
   verticalVelocity -= 19.5 * dt;
   player.position.y += verticalVelocity * dt;
   if(player.position.y <= 0) { player.position.y = 0; verticalVelocity = 0; onGround = true; }
-
-  localAnimState.moving = len > 0.05;
-  localAnimState.sprinting = Boolean(keys.shift && len > 0.05);
-  localAnimState.airborne = !onGround;
 
   if(len > 0.05) {
     const moveX = fx * forward + rx * side, moveZ = fz * forward + rz * side;
@@ -1533,11 +1551,7 @@ function updatePlayer(dt) {
 }
 
 function updateCars(dt) {
-  for(let idx = 0; idx < cars.length; idx++) {
-    const c = cars[idx];
-    // Remote player drives this car: smoothly interpolate from authoritative network state
-    if(mpIsRemoteControlledVehicle(idx)) continue;
-
+  for(const c of cars) {
     const isControlled = (inCar && c === activeCar);
     const throttle = isControlled ? ((keys.w||keys.arrowup?1:0) - (keys.s||keys.arrowdown?1:0)) : 0;
     const steerInput = isControlled ? ((keys.a||keys.arrowleft?1:0) - (keys.d||keys.arrowright?1:0)) : 0;
@@ -1581,7 +1595,6 @@ function updateCars(dt) {
     forwardSpeed -= 0.011 * forwardSpeed * Math.abs(forwardSpeed) * dt;
 
     const isBraking = isControlled && ((throttle < 0 && forwardSpeed > 0.4) || (throttle > 0 && forwardSpeed < -0.4) || handbrake);
-    c.isBraking = isBraking;
     c.brakeLights.forEach(bl => bl.material.color.setHex(isBraking ? 0xff261b : 0x991610));
 
     const wheelbase = 2.7;
@@ -1650,6 +1663,7 @@ function updateCameraAndEnvironment(dt) {
   playerModel.visible = !inCar && cameraMode !== 1;
   const focusPos = (inCar && activeCar) ? activeCar.root.position : player.position;
 
+  // Keep directional sun shadow frustum and sky dome centered on the active player/car
   sun.position.set(focusPos.x - 130, 195, focusPos.z + 105);
   sun.target.position.set(focusPos.x, 0, focusPos.z);
   sun.target.updateMatrixWorld();
@@ -1719,19 +1733,21 @@ function updateHUDAndRadar() {
     modeEl.textContent = `${cameraMode === 1 ? 'FIRST' : 'THIRD'} PERSON`;
   }
 
+  // Draw Live City Radar showing Highways, Avenues, Local Streets, Chunks & Cars
   const w = radarCanvas.width, h = radarCanvas.height;
-  const scale = 0.42;
+  const scale = 0.42; // 1 meter = 0.42px (~350m diameter view)
   radarCtx.clearRect(0, 0, w, h);
   radarCtx.fillStyle = '#0c1520';
   radarCtx.fillRect(0, 0, w, h);
 
   radarCtx.save();
   radarCtx.translate(w/2, h/2);
-  radarCtx.rotate(focusHeading);
+  radarCtx.rotate(focusHeading); // Heading-up radar
 
   const centerCX = Math.round(focusPos.x / CHUNK_SIZE);
   const centerCZ = Math.round(focusPos.z / CHUNK_SIZE);
 
+  // Draw surrounding chunks' districts & roads
   for(let dx = -2; dx <= 2; dx++) {
     for(let dz = -2; dz <= 2; dz++) {
       const cx = centerCX + dx;
@@ -1744,10 +1760,12 @@ function updateHUDAndRadar() {
       radarCtx.fillStyle = distType === 'PARK' ? '#173326' : distType === 'DOWNTOWN' ? '#182433' : '#131d29';
       radarCtx.fillRect(relX - sizePx/2, relZ - sizePx/2, sizePx, sizePx);
 
+      // Local streets
       radarCtx.fillStyle = '#334155';
       radarCtx.fillRect(relX - sizePx/2, relZ - 9*scale/2, sizePx, 9*scale);
       radarCtx.fillRect(relX - 9*scale/2, relZ - sizePx/2, 9*scale, sizePx);
 
+      // West & North boundary avenues/highways
       const westW = getBoundaryHalfWidth(cx) * 2 * scale;
       const northW = getBoundaryHalfWidth(cz) * 2 * scale;
       radarCtx.fillStyle = getBoundaryRoadType(cx) === 'HIGHWAY' ? '#f59e0b' : '#64748b';
@@ -1758,6 +1776,7 @@ function updateHUDAndRadar() {
     }
   }
 
+  // Draw Nearby Cars
   for(const c of cars) {
     if(c === activeCar) continue;
     const rx = (c.root.position.x - focusPos.x) * scale;
@@ -1768,11 +1787,9 @@ function updateHUDAndRadar() {
     radarCtx.fill();
   }
 
-  // Plot Remote Multiplayer Citizens on Radar
-  mpDrawRadarPlayers(radarCtx, focusPos, scale);
-
   radarCtx.restore();
 
+  // Player / Active Vehicle Center Arrow
   radarCtx.fillStyle = '#ffffff';
   radarCtx.beginPath();
   radarCtx.moveTo(w/2, h/2 - 6);
@@ -1783,675 +1800,504 @@ function updateHUDAndRadar() {
   radarCtx.fill();
 }
 
+
 // ============================================================================
-// SEAMLESS AUTOMATIC WEBRTC MULTIPLAYER SYSTEM (PeerJS + Host Election)
+// PEERJS MULTIPLAYER — PEERJS ONLY (NO CUSTOM BACKEND)
+// One shared public world. A well-known PeerJS ID identifies the current host.
+// The host relays player state and car state. If it disappears, clients elect
+// the longest-connected participant and attempt to claim the host ID in order.
 // ============================================================================
-const LOBBY_HOST_PEER_ID = 'lifesim-online-global-metropolis-host-v1';
-const NET_TICK_INTERVAL = 50; // 20 Hz state sync
-const PEER_TIMEOUT_MS = 9500;
 
-const mpDotEl = document.getElementById('mpDot');
-const mpStatusTextEl = document.getElementById('mpStatusText');
-const mpCountEl = document.getElementById('mpCount');
-const mpPlayersEl = document.getElementById('mpPlayers');
-const playerNameInput = document.getElementById('playerNameInput');
+const MULTIPLAYER_HOST_ID = 'lifesim-metropolis-global-v1';
+const MULTIPLAYER_MAX_PLAYERS = 8;
+const multiplayerStatus = document.getElementById('multiplayerStatus');
+const multiplayerText = document.getElementById('multiplayerText');
 
-const OUTFIT_PALETTE = [0x2f855a, 0x9b2c2c, 0x6b46c1, 0xb7791f, 0x2b6cb0, 0xb83280, 0x2c7a7b];
-const SWATCH_CSS = ['#34d399', '#f87171', '#a78bfa', '#fbbf24', '#60a5fa', '#f472b6', '#2dd4bf'];
+let mpPeer = null;
+let mpHostConnection = null;
+let mpIsHost = false;
+let mpConnected = false;
+let mpStarted = false;
+let mpJoinOrder = Number.MAX_SAFE_INTEGER;
+let mpJoinSequence = 0;
+let mpHostTerm = 0;
+let mpLastSend = 0;
+let mpLastHeartbeat = 0;
+let mpElectionInProgress = false;
+let mpReconnectTimer = null;
+let mpLocalPeerId = null;
+let mpHostPeerId = MULTIPLAYER_HOST_ID;
+const mpConnections = new Map();
+const mpPlayers = new Map();
+const mpRemoteAvatars = new Map();
+const mpCarOwners = new Map();
+const mpCarTargets = new Map();
+let mpLatestWorldSnapshot = null;
 
-const localPlayerId = 'citizen-' + Math.random().toString(36).slice(2, 9) + '-' + Date.now().toString(36).slice(-4);
-let localPlayerName = 'Citizen-' + Math.floor(1000 + Math.random() * 9000);
-playerNameInput.value = localPlayerName;
-playerNameInput.addEventListener('input', () => {
-  const clean = playerNameInput.value.trim().slice(0, 18);
-  localPlayerName = clean || localPlayerName;
-  renderMultiplayerHUD();
-});
-
-let peerInstance = null;
-let isHost = false;
-let hostConnection = null; // Used when role === 'CLIENT'
-const clientConnections = new Map(); // Used when role === 'HOST': peerId -> DataConnection
-const remotePlayers = new Map(); // playerId -> remote player entity
-const vehicleOwners = new Array(cars.length).fill(null); // carIndex -> playerId | null
-const remoteVehicleTargets = new Map(); // carIndex -> target transform & telemetry
-let netAccumulator = 0;
-let discoveryActive = false;
-let reconnectTimer = null;
-
-// Same-browser tab-to-tab BroadcastChannel bridge as an instant local fallback if public PeerJS cloud is throttled
-const localTabBus = ('BroadcastChannel' in window) ? new BroadcastChannel('lifesim_online_tab_mesh_v1') : null;
-
-function setMpStatus(text, stateClass) {
-  mpStatusTextEl.textContent = text;
-  mpDotEl.className = stateClass || '';
+function mpStatus(message, state='') {
+  multiplayerText.textContent = message;
+  multiplayerStatus.classList.toggle('online', state === 'online');
+  multiplayerStatus.classList.toggle('error', state === 'error');
 }
-
-function getSwatchColorForId(id) {
-  let hash = 0;
-  for(let i = 0; i < id.length; i++) hash = ((hash << 5) - hash) + id.charCodeAt(i);
-  const idx = Math.abs(hash) % OUTFIT_PALETTE.length;
-  return { hex: OUTFIT_PALETTE[idx], css: SWATCH_CSS[idx] };
-}
-
-function createNametagSprite(name, cssColor) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 320;
-  canvas.height = 68;
-  const ctx = canvas.getContext('2d');
-
-  ctx.fillStyle = 'rgba(10, 17, 25, 0.82)';
-  ctx.beginPath();
-  ctx.roundRect(14, 12, 292, 44, 22);
-  ctx.fill();
-
-  ctx.strokeStyle = cssColor;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.roundRect(14, 12, 292, 44, 22);
-  ctx.stroke();
-
-  ctx.fillStyle = cssColor;
-  ctx.beginPath();
-  ctx.arc(38, 34, 7, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = '#f8fafc';
-  ctx.font = 'bold 22px Inter, Segoe UI, Arial, sans-serif';
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(name.slice(0, 16), 54, 35);
-
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
-  const sprite = new THREE.Sprite(mat);
-  sprite.scale.set(2.4, 0.51, 1);
-  sprite.renderOrder = 999;
-  return sprite;
-}
-
-function getOrCreateRemotePlayer(id, name) {
-  if(id === localPlayerId) return null;
-  let rp = remotePlayers.get(id);
-  if(!rp) {
-    const swatch = getSwatchColorForId(id);
-    const root = new THREE.Group();
-    scene.add(root);
-
-    const charObj = createCharacterModel(swatch.hex);
-    root.add(charObj.model);
-
-    const tag = createNametagSprite(name || 'Citizen', swatch.css);
-    tag.position.set(0, 2.55, 0);
-    scene.add(tag);
-
-    rp = {
-      id,
-      name: name || 'Citizen',
-      cssColor: swatch.css,
-      root,
-      model: charObj.model,
-      rig: charObj.rig,
-      tag,
-      targetPos: new THREE.Vector3(6.2, 0.16, 12.0),
-      targetRotY: 0,
-      inCar: false,
-      carIndex: -1,
-      moving: false,
-      sprinting: false,
-      airborne: false,
-      animPhase: Math.random() * 6.28,
-      lastSeen: performance.now()
-    };
-    remotePlayers.set(id, rp);
-    renderMultiplayerHUD();
-    toast(`${rp.name} joined the city`);
-  } else if(name && rp.name !== name) {
-    rp.name = name;
-    scene.remove(rp.tag);
-    rp.tag.material.map.dispose();
-    rp.tag.material.dispose();
-    rp.tag = createNametagSprite(name, rp.cssColor);
-    scene.add(rp.tag);
-    renderMultiplayerHUD();
-  }
-  rp.lastSeen = performance.now();
-  return rp;
-}
-
-function removeRemotePlayer(id, silent=false) {
-  const rp = remotePlayers.get(id);
-  if(!rp) return;
-  for(let i = 0; i < vehicleOwners.length; i++) {
-    if(vehicleOwners[i] === id) {
-      vehicleOwners[i] = null;
-      remoteVehicleTargets.delete(i);
-    }
-  }
-  scene.remove(rp.root);
-  scene.remove(rp.tag);
-  rp.tag.material.map.dispose();
-  rp.tag.material.dispose();
-  remotePlayers.delete(id);
-  renderMultiplayerHUD();
-  if(!silent) toast(`${rp.name} left the city`);
-}
-
-function renderMultiplayerHUD() {
-  const totalOnline = 1 + remotePlayers.size;
-  mpCountEl.textContent = `${totalOnline} ONLINE`;
-
-  const localSwatch = getSwatchColorForId(localPlayerId).css;
-  let html = `
-    <div class="mp-player-row">
-      <span class="mp-player-name"><span class="mp-swatch" style="background:${localSwatch}"></span>${escapeHtml(localPlayerName)} (You)</span>
-      <span class="mp-badge">${isHost ? 'HOST' : 'YOU'}</span>
-    </div>
-  `;
-  for(const rp of remotePlayers.values()) {
-    html += `
-      <div class="mp-player-row">
-        <span class="mp-player-name"><span class="mp-swatch" style="background:${rp.cssColor}"></span>${escapeHtml(rp.name)}</span>
-        <span class="mp-badge">${rp.inCar ? 'DRIVING' : 'FOOT'}</span>
-      </div>
-    `;
-  }
-  mpPlayersEl.innerHTML = html;
-}
-
-function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-}
-
-// Vehicle occupancy & authority helpers
-function mpClaimVehicle(carIdx) {
-  if(carIdx < 0 || carIdx >= cars.length) return;
-  vehicleOwners[carIdx] = localPlayerId;
-  remoteVehicleTargets.delete(carIdx);
-  sendNetMessage({ type: 'car_claim', id: localPlayerId, name: localPlayerName, carIndex: carIdx });
-}
-
-function mpReleaseVehicle(carIdx) {
-  if(carIdx < 0 || carIdx >= cars.length) return;
-  if(vehicleOwners[carIdx] === localPlayerId) {
-    vehicleOwners[carIdx] = null;
-  }
-  sendNetMessage({ type: 'car_release', id: localPlayerId, carIndex: carIdx });
-}
-
-function mpIsVehicleOccupied(carIdx) {
-  const owner = vehicleOwners[carIdx];
-  return Boolean(owner && owner !== localPlayerId && remotePlayers.has(owner));
-}
-
-function mpGetVehicleDriverName(carIdx) {
-  const owner = vehicleOwners[carIdx];
-  const rp = owner ? remotePlayers.get(owner) : null;
-  return rp ? rp.name : 'another player';
-}
-
-function mpIsRemoteControlledVehicle(carIdx) {
-  const owner = vehicleOwners[carIdx];
-  return Boolean(owner && owner !== localPlayerId && remotePlayers.has(owner));
-}
-
-function mpDrawRadarPlayers(ctx, focusPos, scale) {
-  for(const rp of remotePlayers.values()) {
-    const pos = (rp.inCar && rp.carIndex >= 0 && cars[rp.carIndex])
-      ? cars[rp.carIndex].root.position
-      : rp.root.position;
-    const rx = (pos.x - focusPos.x) * scale;
-    const rz = (pos.z - focusPos.z) * scale;
-    ctx.fillStyle = rp.cssColor;
-    ctx.beginPath();
-    ctx.arc(rx, rz, 4.0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 1.2;
-    ctx.stroke();
+function mpSend(conn, packet) {
+  if(conn && conn.open) {
+    try { conn.send(packet); } catch(err) { console.warn('LifeSim multiplayer send failed:', err); }
   }
 }
-
-// Build compact state packet for local player & driven vehicle
-function buildLocalStatePacket() {
-  const carIdx = (inCar && activeCar) ? cars.indexOf(activeCar) : -1;
-  const pkt = {
-    type: 'state',
-    id: localPlayerId,
-    name: localPlayerName,
-    px: +player.position.x.toFixed(3),
-    py: +player.position.y.toFixed(3),
-    pz: +player.position.z.toFixed(3),
-    ry: +player.rotation.y.toFixed(3),
-    mv: localAnimState.moving ? 1 : 0,
-    sp: localAnimState.sprinting ? 1 : 0,
-    ab: localAnimState.airborne ? 1 : 0,
-    inCar: inCar ? 1 : 0,
-    carIndex: carIdx
-  };
-
-  if(inCar && activeCar && carIdx >= 0) {
-    pkt.car = {
-      x: +activeCar.root.position.x.toFixed(3),
-      z: +activeCar.root.position.z.toFixed(3),
-      ry: +activeCar.root.rotation.y.toFixed(3),
-      vx: +activeCar.vx.toFixed(2),
-      vz: +activeCar.vz.toFixed(2),
-      st: +activeCar.steerAngle.toFixed(3),
-      rl: +activeCar.roll.toFixed(3),
-      pt: +activeCar.pitch.toFixed(3),
-      br: activeCar.isBraking ? 1 : 0,
-      hl: !isDayMode ? 1 : 0
-    };
-  } else if(isHost) {
-    // Host periodically broadcasts idle parked vehicle positions so late joiners see exact car locations
-    pkt.parkedCars = cars.map((c, idx) => ({
-      i: idx,
-      o: vehicleOwners[idx],
-      x: +c.root.position.x.toFixed(2),
-      z: +c.root.position.z.toFixed(2),
-      ry: +c.root.rotation.y.toFixed(3)
-    }));
-  }
-  return pkt;
-}
-
-function applyIncomingPacket(pkt, fromConn=null) {
-  if(!pkt || typeof pkt !== 'object' || pkt.id === localPlayerId) return;
-
-  if(pkt.type === 'hello') {
-    const rp = getOrCreateRemotePlayer(pkt.id, pkt.name);
-    if(isHost) {
-      // Send full world snapshot (all current players + all 8 car states) to newly joined peer
-      const snapshot = {
-        type: 'world_snapshot',
-        id: localPlayerId,
-        cars: cars.map((c, idx) => ({
-          i: idx,
-          o: vehicleOwners[idx],
-          x: +c.root.position.x.toFixed(3),
-          z: +c.root.position.z.toFixed(3),
-          ry: +c.root.rotation.y.toFixed(3)
-        })),
-        players: Array.from(remotePlayers.values()).map(p => ({
-          id: p.id, name: p.name,
-          px: p.targetPos.x, py: p.targetPos.y, pz: p.targetPos.z,
-          ry: p.targetRotY, inCar: p.inCar ? 1 : 0, carIndex: p.carIndex
-        }))
-      };
-      if(fromConn && fromConn.open) fromConn.send(snapshot);
-      broadcastFromHost(pkt, pkt.id);
-    }
-    return;
-  }
-
-  if(pkt.type === 'world_snapshot') {
-    if(Array.isArray(pkt.cars)) {
-      for(const sc of pkt.cars) {
-        if(sc.i >= 0 && sc.i < cars.length && !inCar) {
-          cars[sc.i].root.position.set(sc.x, 0, sc.z);
-          cars[sc.i].root.rotation.y = sc.ry;
-          vehicleOwners[sc.i] = sc.o || null;
-        }
-      }
-    }
-    if(Array.isArray(pkt.players)) {
-      for(const sp of pkt.players) {
-        if(sp.id !== localPlayerId) {
-          const rp = getOrCreateRemotePlayer(sp.id, sp.name);
-          rp.targetPos.set(sp.px, sp.py, sp.pz);
-          rp.root.position.copy(rp.targetPos);
-          rp.targetRotY = sp.ry;
-          rp.inCar = Boolean(sp.inCar);
-          rp.carIndex = sp.carIndex;
-        }
-      }
-    }
-    renderMultiplayerHUD();
-    return;
-  }
-
-  if(pkt.type === 'leave') {
-    removeRemotePlayer(pkt.id);
-    if(isHost) broadcastFromHost(pkt, pkt.id);
-    return;
-  }
-
-  if(pkt.type === 'car_claim') {
-    getOrCreateRemotePlayer(pkt.id, pkt.name);
-    if(pkt.carIndex >= 0 && pkt.carIndex < cars.length) {
-      // If local player happened to claim the exact same car simultaneously, yield to remote peer
-      if(inCar && activeCar && cars.indexOf(activeCar) === pkt.carIndex) {
-        inCar = false; activeCar = null; player.visible = true;
-        toast(`${pkt.name || 'Another player'} entered that vehicle first`);
-      }
-      vehicleOwners[pkt.carIndex] = pkt.id;
-    }
-    if(isHost) broadcastFromHost(pkt, pkt.id);
-    return;
-  }
-
-  if(pkt.type === 'car_release') {
-    if(pkt.carIndex >= 0 && pkt.carIndex < cars.length && vehicleOwners[pkt.carIndex] === pkt.id) {
-      vehicleOwners[pkt.carIndex] = null;
-      remoteVehicleTargets.delete(pkt.carIndex);
-    }
-    if(isHost) broadcastFromHost(pkt, pkt.id);
-    return;
-  }
-
-  if(pkt.type === 'state') {
-    const rp = getOrCreateRemotePlayer(pkt.id, pkt.name);
-    const prevInCar = rp.inCar;
-    rp.targetPos.set(pkt.px, pkt.py, pkt.pz);
-    rp.targetRotY = pkt.ry;
-    rp.moving = Boolean(pkt.mv);
-    rp.sprinting = Boolean(pkt.sp);
-    rp.airborne = Boolean(pkt.ab);
-    rp.inCar = Boolean(pkt.inCar);
-    rp.carIndex = pkt.carIndex;
-
-    if(prevInCar !== rp.inCar) {
-      renderMultiplayerHUD();
-    }
-
-    if(rp.inCar && rp.carIndex >= 0 && rp.carIndex < cars.length && pkt.car) {
-      vehicleOwners[rp.carIndex] = pkt.id;
-      remoteVehicleTargets.set(rp.carIndex, pkt.car);
-    } else {
-      for(let i = 0; i < vehicleOwners.length; i++) {
-        if(vehicleOwners[i] === pkt.id) {
-          vehicleOwners[i] = null;
-          remoteVehicleTargets.delete(i);
-        }
-      }
-    }
-
-    if(Array.isArray(pkt.parkedCars) && !isHost) {
-      for(const pc of pkt.parkedCars) {
-        if(pc.i >= 0 && pc.i < cars.length && !pc.o && !vehicleOwners[pc.i]) {
-          const carObj = cars[pc.i];
-          if(Math.hypot(carObj.vx, carObj.vz) < 0.2) {
-            carObj.root.position.x = THREE.MathUtils.lerp(carObj.root.position.x, pc.x, 0.25);
-            carObj.root.position.z = THREE.MathUtils.lerp(carObj.root.position.z, pc.z, 0.25);
-            carObj.root.rotation.y = pc.ry;
-          }
-        }
-      }
-    }
-
-    // Host relays client state packets to all other connected clients
-    if(isHost) {
-      broadcastFromHost(pkt, pkt.id);
-    }
+function mpBroadcast(packet, exceptId=null) {
+  for(const [id, conn] of mpConnections) {
+    if(id !== exceptId) mpSend(conn, packet);
   }
 }
-
-function broadcastFromHost(pkt, excludePlayerId=null) {
-  for(const [peerKey, conn] of clientConnections.entries()) {
-    if(conn && conn.open && conn._playerId !== excludePlayerId) {
-      try { conn.send(pkt); } catch(_) {}
-    }
-  }
+function mpPlayerCount() {
+  return Math.min(MULTIPLAYER_MAX_PLAYERS, mpPlayers.size + 1);
 }
-
-function sendNetMessage(pkt) {
-  if(isHost) {
-    broadcastFromHost(pkt, localPlayerId);
-  } else if(hostConnection && hostConnection.open) {
-    try { hostConnection.send(pkt); } catch(_) {}
-  }
-  if(localTabBus) {
-    try { localTabBus.postMessage(pkt); } catch(_) {}
-  }
+function mpGetCarIndex() {
+  return activeCar ? cars.indexOf(activeCar) : -1;
 }
-
-if(localTabBus) {
-  localTabBus.onmessage = (ev) => {
-    if(ev.data && ev.data.id !== localPlayerId) {
-      applyIncomingPacket(ev.data);
-    }
+function mpCaptureLocalState() {
+  const carStates = cars.map((car, index) => ({
+    i:index,
+    x:car.root.position.x, y:car.root.position.y, z:car.root.position.z,
+    ry:car.root.rotation.y, vx:car.vx, vz:car.vz,
+    av:car.angularVel, steer:car.steerAngle
+  }));
+  return {
+    type:'PLAYER_STATE',
+    id:mpLocalPeerId,
+    joinOrder:mpJoinOrder,
+    x:player.position.x, y:player.position.y, z:player.position.z,
+    ry:player.rotation.y, yaw, pitch,
+    inCar, carIndex:mpGetCarIndex(),
+    day:!!isDayMode,
+    cars:carStates,
+    owners:Array.from(mpCarOwners.entries()),
+    term:mpHostTerm,
+    sentAt:Date.now()
   };
 }
-
-// Smoothly interpolate all remote players & remote-driven vehicles every frame
-function updateMultiplayer(dt) {
-  const now = performance.now();
-
-  // 1. Interpolate remote characters & animate limbs
-  for(const [id, rp] of remotePlayers.entries()) {
-    if(now - rp.lastSeen > PEER_TIMEOUT_MS) {
-      removeRemotePlayer(id);
-      continue;
+function mpMakeRemoteAvatar(id) {
+  if(mpRemoteAvatars.has(id)) return mpRemoteAvatars.get(id);
+  const group = new THREE.Group();
+  const model = playerModel.clone(true);
+  group.add(model);
+  scene.add(group);
+  const record = {group, model, target:null, lastSeen:performance.now(), inCar:false};
+  mpRemoteAvatars.set(id, record);
+  return record;
+}
+function mpRemovePlayer(id) {
+  const avatar = mpRemoteAvatars.get(id);
+  if(avatar) {
+    scene.remove(avatar.group);
+    avatar.group.traverse(obj => {
+      // Cloned character meshes share the original geometry/materials.
+      // Do not dispose shared assets here.
+    });
+    mpRemoteAvatars.delete(id);
+  }
+  mpPlayers.delete(id);
+  mpConnections.delete(id);
+  for(const [carIndex, owner] of mpCarOwners) {
+    if(owner === id) mpCarOwners.delete(carIndex);
+  }
+  mpUpdateStatus();
+}
+function mpApplyPlayerState(state) {
+  if(!state || !state.id || state.id === mpLocalPeerId) return;
+  const existing = mpPlayers.get(state.id) || {};
+  mpPlayers.set(state.id, {...existing, ...state, lastSeen:performance.now()});
+  const avatar = mpMakeRemoteAvatar(state.id);
+  avatar.target = state;
+  avatar.lastSeen = performance.now();
+  avatar.inCar = !!state.inCar;
+  avatar.group.visible = !state.inCar;
+  if(Array.isArray(state.cars)) {
+    for(const carState of state.cars) {
+      if(!carState || !Number.isInteger(carState.i) || !cars[carState.i]) continue;
+      if(carState.i === mpGetCarIndex()) continue;
+      mpCarTargets.set(carState.i, carState);
     }
-
-    rp.root.position.lerp(rp.targetPos, 1 - Math.pow(0.0005, dt));
-    // Shortest-angle yaw interpolation
-    let diff = rp.targetRotY - rp.root.rotation.y;
-    while(diff > Math.PI) diff -= Math.PI * 2;
-    while(diff < -Math.PI) diff += Math.PI * 2;
-    rp.root.rotation.y += diff * (1 - Math.pow(0.0005, dt));
-
-    if(rp.inCar && rp.carIndex >= 0 && rp.carIndex < cars.length) {
-      rp.model.visible = false;
-      const carPos = cars[rp.carIndex].root.position;
-      rp.tag.position.set(carPos.x, 2.75, carPos.z);
-    } else {
-      rp.model.visible = true;
-      rp.tag.position.set(rp.root.position.x, rp.root.position.y + 2.55, rp.root.position.z);
-
-      if(rp.moving) {
-        rp.animPhase += dt * (rp.sprinting ? 13.0 : 10.0);
-        const stride = rp.sprinting ? 1.25 : 1.0;
-        const swing = Math.sin(rp.animPhase) * 0.62 * stride;
-        rp.rig.legPivots[0].rotation.x = swing;
-        rp.rig.legPivots[1].rotation.x = -swing;
-        rp.rig.kneePivots[0].rotation.x = Math.max(0, -Math.sin(rp.animPhase)) * 0.55 * stride;
-        rp.rig.kneePivots[1].rotation.x = Math.max(0,  Math.sin(rp.animPhase)) * 0.55 * stride;
-        rp.rig.armPivots[0].rotation.x = -swing * 0.62;
-        rp.rig.armPivots[1].rotation.x =  swing * 0.62;
-        rp.rig.forearmPivots[0].rotation.x = -0.12 + Math.max(0,  Math.sin(rp.animPhase)) * 0.16 * stride;
-        rp.rig.forearmPivots[1].rotation.x = -0.12 + Math.max(0, -Math.sin(rp.animPhase)) * 0.16 * stride;
+  }
+  if(Array.isArray(state.owners)) {
+    mpCarOwners.clear();
+    for(const entry of state.owners) {
+      if(Array.isArray(entry) && Number.isInteger(entry[0])) mpCarOwners.set(entry[0], entry[1]);
+    }
+  }
+}
+function mpApplyWorldSnapshot(snapshot) {
+  if(!snapshot || !Array.isArray(snapshot.players)) return;
+  mpLatestWorldSnapshot = snapshot;
+  if(Number.isFinite(snapshot.term)) mpHostTerm = Math.max(mpHostTerm, snapshot.term);
+  if(Number.isFinite(snapshot.sequence)) mpJoinSequence = Math.max(mpJoinSequence, snapshot.sequence);
+  if(Array.isArray(snapshot.cars)) {
+    for(const carState of snapshot.cars) {
+      if(!carState || !cars[carState.i]) continue;
+      const c = cars[carState.i];
+      c.root.position.set(carState.x, carState.y, carState.z);
+      c.root.rotation.y = carState.ry;
+      c.vx = carState.vx || 0; c.vz = carState.vz || 0;
+      c.angularVel = carState.av || 0; c.steerAngle = carState.steer || 0;
+    }
+  }
+  if(Array.isArray(snapshot.owners)) {
+    mpCarOwners.clear();
+    for(const entry of snapshot.owners) if(Array.isArray(entry)) mpCarOwners.set(entry[0], entry[1]);
+  }
+  for(const state of snapshot.players) mpApplyPlayerState(state);
+}
+function mpBuildSnapshot() {
+  const local = mpCaptureLocalState();
+  const players = [local];
+  for(const state of mpPlayers.values()) players.push(state);
+  return {
+    type:'WORLD_SNAPSHOT',
+    term:mpHostTerm,
+    sequence:mpJoinSequence,
+    players,
+    cars:local.cars,
+    owners:Array.from(mpCarOwners.entries()),
+    day:!!isDayMode,
+    at:Date.now()
+  };
+}
+function mpUpdateStatus() {
+  if(!mpStarted) return;
+  const count = mpIsHost ? mpPlayerCount() : Math.min(MULTIPLAYER_MAX_PLAYERS, mpPlayers.size + (mpConnected ? 1 : 0));
+  const role = mpIsHost ? 'HOST' : (mpConnected ? 'CONNECTED' : 'RECONNECTING');
+  mpStatus(`MULTIPLAYER: ${role} · ${count}/${MULTIPLAYER_MAX_PLAYERS} PLAYERS`, mpConnected || mpIsHost ? 'online' : '');
+}
+function mpSetCarOwner(index, ownerId) {
+  if(index < 0) return;
+  if(ownerId) mpCarOwners.set(index, ownerId);
+  else mpCarOwners.delete(index);
+  const packet = {type:'CAR_OWNERS', owners:Array.from(mpCarOwners.entries()), term:mpHostTerm};
+  if(mpIsHost) mpBroadcast(packet);
+  else mpSend(mpHostConnection, packet);
+}
+function mpHandlePacket(packet, fromId) {
+  if(!packet || typeof packet !== 'object') return;
+  if(packet.type === 'WELCOME') {
+    mpConnected = true;
+    mpHostPeerId = fromId;
+    mpJoinOrder = Number.isFinite(packet.joinOrder) ? packet.joinOrder : mpJoinOrder;
+    mpHostTerm = Math.max(mpHostTerm, packet.term || 0);
+    mpJoinSequence = Math.max(mpJoinSequence, packet.sequence || 0);
+    if(packet.snapshot) mpApplyWorldSnapshot(packet.snapshot);
+    mpSend(mpHostConnection, {type:'JOIN_ACK', id:mpLocalPeerId});
+    mpUpdateStatus();
+    return;
+  }
+  if(packet.type === 'ROSTER') {
+    if(Array.isArray(packet.players)) {
+      const present = new Set(packet.players.map(p => p.id));
+      for(const p of packet.players) if(p.id !== mpLocalPeerId) mpApplyPlayerState(p);
+      for(const id of mpPlayers.keys()) if(!present.has(id)) mpRemovePlayer(id);
+    }
+    mpUpdateStatus();
+    return;
+  }
+  if(packet.type === 'PLAYER_STATE') {
+    if(mpIsHost) {
+      if(packet.id !== fromId) return;
+      const activeIndex = packet.inCar ? packet.carIndex : -1;
+      if(activeIndex >= 0) {
+        const owner = mpCarOwners.get(activeIndex);
+        if(owner && owner !== fromId) {
+          mpSend(mpConnections.get(fromId), {type:'CAR_DENIED', carIndex:activeIndex});
+          return;
+        }
+        mpCarOwners.set(activeIndex, fromId);
       } else {
-        for(const limb of rp.rig.legPivots) limb.rotation.x = THREE.MathUtils.damp(limb.rotation.x, 0, 12, dt);
-        for(const limb of rp.rig.kneePivots) limb.rotation.x = THREE.MathUtils.damp(limb.rotation.x, 0, 12, dt);
-        for(const limb of rp.rig.armPivots) limb.rotation.x = THREE.MathUtils.damp(limb.rotation.x, 0, 12, dt);
-        for(const limb of rp.rig.forearmPivots) limb.rotation.x = THREE.MathUtils.damp(limb.rotation.x, 0, 12, dt);
+        for(const [idx, owner] of mpCarOwners) if(owner === fromId) mpCarOwners.delete(idx);
       }
-    }
-  }
-
-  // 2. Interpolate vehicles currently driven by remote players
-  for(const [carIdx, targetCar] of remoteVehicleTargets.entries()) {
-    const c = cars[carIdx];
-    if(!c || !mpIsRemoteControlledVehicle(carIdx)) continue;
-
-    const blend = 1 - Math.pow(0.0002, dt);
-    c.root.position.x = THREE.MathUtils.lerp(c.root.position.x, targetCar.x, blend);
-    c.root.position.z = THREE.MathUtils.lerp(c.root.position.z, targetCar.z, blend);
-
-    let rotDiff = targetCar.ry - c.root.rotation.y;
-    while(rotDiff > Math.PI) rotDiff -= Math.PI * 2;
-    while(rotDiff < -Math.PI) rotDiff += Math.PI * 2;
-    c.root.rotation.y += rotDiff * blend;
-
-    c.vx = targetCar.vx;
-    c.vz = targetCar.vz;
-    c.steerAngle = THREE.MathUtils.damp(c.steerAngle, targetCar.st, 16, dt);
-    for(const pivot of c.steerPivots) pivot.rotation.y = c.steerAngle;
-
-    c.chassis.rotation.z = THREE.MathUtils.damp(c.chassis.rotation.z, targetCar.rl, 12, dt);
-    c.chassis.rotation.x = THREE.MathUtils.damp(c.chassis.rotation.x, targetCar.pt, 12, dt);
-    c.brakeLights.forEach(bl => bl.material.color.setHex(targetCar.br ? 0xff261b : 0x991610));
-    c.headlights.forEach(hl => hl.intensity = targetCar.hl ? 5.4 : 0);
-
-    const speed = Math.hypot(c.vx, c.vz);
-    for(const w of c.wheelMeshes) w.rotation.x -= speed * dt * 2.38;
-  }
-
-  // 3. Throttled 20Hz state broadcast
-  netAccumulator += dt * 1000;
-  if(netAccumulator >= NET_TICK_INTERVAL) {
-    netAccumulator = 0;
-    sendNetMessage(buildLocalStatePacket());
-  }
-}
-
-// ============================================================================
-// AUTOMATIC HOST DISCOVERY & HOST MIGRATION ENGINE
-// ============================================================================
-function cleanupPeerInstance() {
-  if(peerInstance) {
-    try { peerInstance.destroy(); } catch(_) {}
-    peerInstance = null;
-  }
-  hostConnection = null;
-  clientConnections.clear();
-  isHost = false;
-}
-
-function becomeSessionHost() {
-  cleanupPeerInstance();
-  setMpStatus('Starting host...', '');
-
-  const hostPeer = new Peer(LOBBY_HOST_PEER_ID, { debug: 0 });
-  peerInstance = hostPeer;
-
-  hostPeer.on('open', () => {
-    isHost = true;
-    discoveryActive = false;
-    setMpStatus('Hosting session', 'host');
-    renderMultiplayerHUD();
-    toast('Hosting public LifeSim session');
-  });
-
-  hostPeer.on('connection', (conn) => {
-    conn.on('open', () => {
-      clientConnections.set(conn.peer, conn);
-    });
-    conn.on('data', (data) => {
-      if(data && data.id) conn._playerId = data.id;
-      applyIncomingPacket(data, conn);
-    });
-    conn.on('close', () => {
-      clientConnections.delete(conn.peer);
-      if(conn._playerId) {
-        removeRemotePlayer(conn._playerId);
-        broadcastFromHost({ type: 'leave', id: conn._playerId }, conn._playerId);
-      }
-    });
-    conn.on('error', () => {
-      clientConnections.delete(conn.peer);
-    });
-  });
-
-  hostPeer.on('error', (err) => {
-    // Another player claimed the host ID a split-second earlier -> connect as client instead!
-    if(err && err.type === 'unavailable-id') {
-      discoveryActive = false;
-      connectAsClient();
+      mpApplyPlayerState(packet);
+      mpBroadcast(packet, fromId);
+      mpLatestWorldSnapshot = mpBuildSnapshot();
     } else {
-      discoveryActive = false;
-      setMpStatus('Offline (Solo)', 'offline');
-      scheduleReconnection(4500);
+      mpApplyPlayerState(packet);
     }
-  });
-}
-
-function connectAsClient() {
-  cleanupPeerInstance();
-  setMpStatus('Connecting...', '');
-
-  const clientPeer = new Peer(undefined, { debug: 0 });
-  peerInstance = clientPeer;
-  let connectedToHost = false;
-
-  const connectTimeout = setTimeout(() => {
-    if(!connectedToHost) {
-      // No active host answered within discovery window -> promote self to host!
-      becomeSessionHost();
-    }
-  }, 2400);
-
-  clientPeer.on('open', () => {
-    const conn = clientPeer.connect(LOBBY_HOST_PEER_ID, { reliable: false });
-    hostConnection = conn;
-
-    conn.on('open', () => {
-      connectedToHost = true;
-      clearTimeout(connectTimeout);
-      isHost = false;
-      discoveryActive = false;
-      setMpStatus('Connected', 'online');
-      renderMultiplayerHUD();
-      conn.send({ type: 'hello', id: localPlayerId, name: localPlayerName });
-      toast('Connected to live Metropolis session');
-    });
-
-    conn.on('data', (data) => {
-      applyIncomingPacket(data, conn);
-    });
-
-    conn.on('close', () => {
-      if(connectedToHost) {
-        // Host disconnected! Clear stale host state and run staggered host migration
-        for(const id of Array.from(remotePlayers.keys())) removeRemotePlayer(id, true);
-        setMpStatus('Host left · Migrating...', '');
-        toast('Host disconnected · Electing new host…');
-        const jitter = 250 + Math.random() * 900;
-        scheduleReconnection(jitter);
-      }
-    });
-
-    conn.on('error', () => {
-      if(!connectedToHost) {
-        clearTimeout(connectTimeout);
-        becomeSessionHost();
-      }
-    });
-  });
-
-  clientPeer.on('error', (err) => {
-    clearTimeout(connectTimeout);
-    if(err && err.type === 'peer-unavailable') {
-      // Lobby host ID is free -> become host immediately!
-      becomeSessionHost();
-    } else {
-      discoveryActive = false;
-      setMpStatus('Offline (Solo)', 'offline');
-      scheduleReconnection(5000);
-    }
-  });
-}
-
-function startAutomaticMultiplayer() {
-  if(discoveryActive) return;
-  if(typeof Peer === 'undefined') {
-    setMpStatus('Offline (Solo)', 'offline');
     return;
   }
-  discoveryActive = true;
-  setMpStatus('Finding session...', '');
-  renderMultiplayerHUD();
-  connectAsClient();
+  if(packet.type === 'WORLD_SNAPSHOT') {
+    if(!mpIsHost && (!Number.isFinite(packet.term) || packet.term >= mpHostTerm)) {
+      mpApplyWorldSnapshot(packet);
+    }
+    return;
+  }
+  if(packet.type === 'CAR_OWNERS') {
+    if(mpIsHost) {
+      // The host is the authority for vehicle ownership. Client claims are
+      // confirmed by the next PLAYER_STATE packet, preventing two drivers
+      // from simultaneously taking the same vehicle.
+      mpSend(mpConnections.get(fromId), {type:'CAR_OWNERS', owners:Array.from(mpCarOwners.entries())});
+    } else if(Array.isArray(packet.owners)) {
+      mpCarOwners.clear();
+      for(const entry of packet.owners) if(Array.isArray(entry)) mpCarOwners.set(entry[0], entry[1]);
+    }
+    return;
+  }
+  if(packet.type === 'CAR_DENIED') {
+    if(activeCar && cars.indexOf(activeCar) === packet.carIndex) {
+      activeCar = null; inCar = false; player.visible = true;
+      toast('That vehicle is already being driven by another player');
+    }
+    return;
+  }
+  if(packet.type === 'PING') {
+    mpSend(mpConnections.get(fromId) || mpHostConnection, {type:'PONG', at:packet.at});
+    return;
+  }
+  if(packet.type === 'PONG') return;
 }
-
-function scheduleReconnection(delayMs) {
-  clearTimeout(reconnectTimer);
-  reconnectTimer = setTimeout(() => {
-    discoveryActive = false;
-    startAutomaticMultiplayer();
-  }, delayMs);
+function mpRegisterHostConnection(conn) {
+  conn.on('open', () => {
+    if(mpConnections.size >= MULTIPLAYER_MAX_PLAYERS - 1) {
+      mpSend(conn, {type:'FULL'});
+      conn.close();
+      return;
+    }
+    const id = conn.peer;
+    mpJoinSequence++;
+    const joinOrder = mpJoinSequence;
+    mpConnections.set(id, conn);
+    mpPlayers.set(id, {id, joinOrder, lastSeen:performance.now()});
+    mpSend(conn, {
+      type:'WELCOME', joinOrder, term:mpHostTerm,
+      sequence:mpJoinSequence,
+      snapshot:mpBuildSnapshot()
+    });
+    mpBroadcast({type:'ROSTER', players:[mpCaptureLocalState(), ...Array.from(mpPlayers.values())]}, id);
+    mpUpdateStatus();
+  });
+  conn.on('data', packet => mpHandlePacket(packet, conn.peer));
+  conn.on('close', () => {
+    mpRemovePlayer(conn.peer);
+    if(mpIsHost) mpBroadcast({type:'ROSTER', players:[mpCaptureLocalState(), ...Array.from(mpPlayers.values())]});
+  });
+  conn.on('error', err => console.warn('LifeSim peer connection error:', err));
 }
-
-window.addEventListener('beforeunload', () => {
-  sendNetMessage({ type: 'leave', id: localPlayerId });
-  cleanupPeerInstance();
-});
-
-renderMultiplayerHUD();
-startAutomaticMultiplayer();
+function mpConnectToHost() {
+  if(!mpPeer || mpPeer.destroyed || mpPeer.disconnected) return;
+  mpStatus('MULTIPLAYER: FINDING HOST…');
+  const conn = mpPeer.connect(MULTIPLAYER_HOST_ID, {reliable:true, serialization:'json'});
+  mpHostConnection = conn;
+  conn.on('open', () => {
+    mpConnected = true;
+    mpHostPeerId = MULTIPLAYER_HOST_ID;
+    mpSend(conn, {type:'HELLO', id:mpLocalPeerId});
+    mpUpdateStatus();
+  });
+  conn.on('data', packet => mpHandlePacket(packet, MULTIPLAYER_HOST_ID));
+  conn.on('close', () => {
+    mpConnected = false;
+    mpHostConnection = null;
+    mpRemovePlayer(MULTIPLAYER_HOST_ID);
+    mpUpdateStatus();
+    if(mpStarted && !mpIsHost) mpBeginElection();
+  });
+  conn.on('error', err => {
+    console.warn('LifeSim host connection error:', err);
+    mpConnected = false;
+    mpRemovePlayer(MULTIPLAYER_HOST_ID);
+    mpUpdateStatus();
+    if(mpStarted && !mpIsHost) mpBeginElection();
+  });
+}
+function mpBecomeHost(peerInstance, migrated=false) {
+  mpPeer = peerInstance;
+  mpLocalPeerId = MULTIPLAYER_HOST_ID;
+  mpIsHost = true;
+  mpConnected = true;
+  mpHostPeerId = MULTIPLAYER_HOST_ID;
+  mpHostTerm++;
+  mpElectionInProgress = false;
+  if(!Number.isFinite(mpJoinOrder) || mpJoinOrder === Number.MAX_SAFE_INTEGER) mpJoinOrder = 0;
+  mpPeer.on('connection', conn => mpRegisterHostConnection(conn));
+  mpPeer.on('disconnected', () => {
+    mpIsHost = false; mpConnected = false;
+    mpBeginElection();
+  });
+  mpPeer.on('error', err => {
+    console.warn('LifeSim host peer error:', err);
+    if(err && err.type === 'unavailable-id') {
+      mpIsHost = false;
+      mpConnectToHost();
+    }
+  });
+  mpLatestWorldSnapshot = mpBuildSnapshot();
+  mpStatus(`MULTIPLAYER: HOST · 1/${MULTIPLAYER_MAX_PLAYERS} PLAYERS`, 'online');
+  if(migrated) toast('Host migrated · world session restored');
+  mpUpdateStatus();
+}
+function mpTryClaimHost(delay) {
+  setTimeout(() => {
+    if(!mpStarted || mpIsHost || mpElectionInProgress) return;
+    mpElectionInProgress = true;
+    mpStatus('MULTIPLAYER: HOST MIGRATION…');
+    let candidate;
+    try { candidate = new Peer(MULTIPLAYER_HOST_ID); }
+    catch(err) {
+      mpElectionInProgress = false;
+      setTimeout(mpBeginElection, 1800);
+      return;
+    }
+    let settled = false;
+    candidate.on('open', () => {
+      if(settled) return;
+      settled = true;
+      if(mpPeer && mpPeer !== candidate) {
+        try { mpPeer.destroy(); } catch(e) {}
+      }
+      mpBecomeHost(candidate, true);
+    });
+    candidate.on('error', err => {
+      if(settled) return;
+      if(err && err.type === 'unavailable-id') {
+        settled = true;
+        mpElectionInProgress = false;
+        if(mpPeer && !mpPeer.destroyed) mpConnectToHost();
+        else mpCreateClientPeer();
+      } else {
+        console.warn('LifeSim host election error:', err);
+        settled = true;
+        mpElectionInProgress = false;
+        setTimeout(mpBeginElection, 2200);
+      }
+    });
+    setTimeout(() => {
+      if(!settled) {
+        settled = true;
+        try { candidate.destroy(); } catch(e) {}
+        mpElectionInProgress = false;
+        setTimeout(mpBeginElection, 1800);
+      }
+    }, 9000);
+  }, delay);
+}
+function mpBeginElection() {
+  if(!mpStarted || mpIsHost || mpElectionInProgress) return;
+  if(mpReconnectTimer) clearTimeout(mpReconnectTimer);
+  const candidates = [{id:mpLocalPeerId, joinOrder:mpJoinOrder}];
+  for(const p of mpPlayers.values()) {
+    if(p.id && Number.isFinite(p.joinOrder)) candidates.push({id:p.id, joinOrder:p.joinOrder});
+  }
+  candidates.sort((a,b) => a.joinOrder - b.joinOrder);
+  const bestOrder = candidates.length ? candidates[0].joinOrder : mpJoinOrder;
+  const tied = candidates.filter(c => c.joinOrder === bestOrder);
+  const chosen = tied.length ? tied[Math.floor(Math.random()*tied.length)] : {id:mpLocalPeerId};
+  const rank = chosen.id === mpLocalPeerId ? 0 : 1;
+  // If local player is not the preferred candidate, keep reconnecting to the
+  // fixed host ID. A later election retry handles a failed preferred candidate.
+  if(chosen.id !== mpLocalPeerId) {
+    mpReconnectTimer = setTimeout(() => {
+      if(mpPeer && !mpPeer.destroyed) mpConnectToHost();
+      else mpCreateClientPeer();
+      mpElectionInProgress = false;
+    }, 1600);
+    return;
+  }
+  mpTryClaimHost(rank * 1200 + Math.random()*350);
+}
+function mpCreateClientPeer() {
+  if(!mpStarted) return;
+  try {
+    const p = new Peer();
+    mpPeer = p;
+    p.on('open', id => {
+      mpLocalPeerId = id;
+      mpConnectToHost();
+    });
+    p.on('error', err => {
+      console.warn('LifeSim PeerJS client error:', err);
+      mpStatus('MULTIPLAYER: CONNECTION RETRYING…', 'error');
+      setTimeout(() => {
+        if(mpStarted && !mpIsHost) mpCreateClientPeer();
+      }, 2500);
+    });
+    p.on('disconnected', () => {
+      if(mpStarted && !mpIsHost) {
+        try { p.reconnect(); } catch(e) {}
+      }
+    });
+  } catch(err) {
+    console.error(err);
+    mpStatus('MULTIPLAYER: PEERJS UNAVAILABLE', 'error');
+  }
+}
+function startMultiplayer() {
+  if(mpStarted) return;
+  mpStarted = true;
+  mpStatus('MULTIPLAYER: CONNECTING TO PEERJS…');
+  let hostCandidate;
+  try { hostCandidate = new Peer(MULTIPLAYER_HOST_ID); }
+  catch(err) {
+    console.warn(err);
+    mpCreateClientPeer();
+    return;
+  }
+  let opened = false;
+  hostCandidate.on('open', () => {
+    opened = true;
+    mpLocalPeerId = MULTIPLAYER_HOST_ID;
+    mpJoinOrder = 0;
+    mpBecomeHost(hostCandidate, false);
+  });
+  hostCandidate.on('error', err => {
+    console.warn('LifeSim initial host claim:', err);
+    if(err && err.type === 'unavailable-id') {
+      if(!opened) {
+        mpIsHost = false;
+        mpCreateClientPeer();
+      }
+    } else {
+      mpStatus('MULTIPLAYER: PEERJS CONNECTION ISSUE', 'error');
+      setTimeout(() => { if(mpStarted && !mpIsHost) mpCreateClientPeer(); }, 2500);
+    }
+  });
+}
+function mpTick(dt) {
+  if(!mpStarted) return;
+  const now = performance.now();
+  if(mpIsHost) {
+    if(now - mpLastHeartbeat > 1000) {
+      mpLastHeartbeat = now;
+      const snapshot = mpBuildSnapshot();
+      mpLatestWorldSnapshot = snapshot;
+      mpBroadcast(snapshot);
+    }
+  } else if(mpConnected && mpHostConnection && now - mpLastSend > 65) {
+    mpLastSend = now;
+    mpSend(mpHostConnection, mpCaptureLocalState());
+  }
+  for(const [id, avatar] of mpRemoteAvatars) {
+    if(avatar.target) {
+      const s = avatar.target;
+      const alpha = 1 - Math.exp(-dt * 14);
+      avatar.group.position.x = THREE.MathUtils.lerp(avatar.group.position.x, s.x || 0, alpha);
+      avatar.group.position.y = THREE.MathUtils.lerp(avatar.group.position.y, s.y || 0, alpha);
+      avatar.group.position.z = THREE.MathUtils.lerp(avatar.group.position.z, s.z || 0, alpha);
+      avatar.group.rotation.y = THREE.MathUtils.lerp(avatar.group.rotation.y, s.ry || 0, alpha);
+    }
+  }
+  for(const [index, target] of mpCarTargets) {
+    const c = cars[index];
+    if(!c || index === mpGetCarIndex()) continue;
+    const alpha = 1 - Math.exp(-dt * 18);
+    c.root.position.x = THREE.MathUtils.lerp(c.root.position.x, target.x, alpha);
+    c.root.position.y = THREE.MathUtils.lerp(c.root.position.y, target.y, alpha);
+    c.root.position.z = THREE.MathUtils.lerp(c.root.position.z, target.z, alpha);
+    c.root.rotation.y += THREE.MathUtils.euclideanModulo(target.ry - c.root.rotation.y + Math.PI, Math.PI*2) * alpha - Math.PI * alpha;
+    c.vx = target.vx || 0; c.vz = target.vz || 0;
+    c.angularVel = target.av || 0; c.steerAngle = target.steer || 0;
+  }
+  if(mpIsHost) {
+    for(const [id, conn] of mpConnections) {
+      if(!conn.open) mpRemovePlayer(id);
+    }
+  }
+}
 
 // ============================================================================
 // MAIN ANIMATION LOOP & UI EVENTS
@@ -2464,7 +2310,6 @@ function animate() {
   if(running) {
     updatePlayer(dt);
     updateCars(dt);
-    updateMultiplayer(dt);
     updateParticles(dt);
 
     const activePos = (inCar && activeCar) ? activeCar.root.position : player.position;
@@ -2472,22 +2317,18 @@ function animate() {
 
     updateCameraAndEnvironment(dt);
     updateHUDAndRadar();
-  } else {
-    updateMultiplayer(dt);
+    mpTick(dt);
   }
   renderer.render(scene, camera);
 }
 animate();
 
 document.getElementById('startButton').addEventListener('click', () => {
-  const cleanName = playerNameInput.value.trim().slice(0, 18);
-  if(cleanName) localPlayerName = cleanName;
-  renderMultiplayerHUD();
-  sendNetMessage({ type: 'hello', id: localPlayerId, name: localPlayerName });
   running = true;
   startScreen.style.display = 'none';
+  startMultiplayer();
   renderer.domElement.requestPointerLock?.();
-  toast(`Welcome ${localPlayerName} · Chunk Streaming & Multiplayer Active`);
+  toast('Welcome to LifeSim Metropolis · Chunk Streaming Active');
 });
 
 document.getElementById('resetButton').addEventListener('click', resetPosition);

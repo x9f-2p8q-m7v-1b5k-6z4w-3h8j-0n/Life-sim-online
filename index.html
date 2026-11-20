@@ -67,6 +67,25 @@
     z-index:20; display:none; pointer-events:auto; color:#fff;
     font:14px/1.4 Inter,Segoe UI,Arial,sans-serif;
   }
+  #chatPopups {
+    position:fixed; left:16px; bottom:104px; width:min(540px,calc(100vw - 32px));
+    z-index:19; display:flex; flex-direction:column; align-items:flex-start;
+    gap:3px; pointer-events:none; color:#fff;
+    font:14px/1.35 Inter,Segoe UI,Arial,sans-serif;
+    text-shadow:1px 2px 3px #000, 0 0 5px #000;
+  }
+  .chatPopupLine {
+    max-width:100%; padding:2px 5px; overflow-wrap:anywhere;
+    background:rgba(0,0,0,.24); border-radius:3px;
+    animation:chatPopupFade 12s ease-out forwards;
+  }
+  .chatPopupName { color:#8bdcff; font-weight:800; }
+  .chatPopupColon { color:#ddd; }
+  .chatPopupMessage { color:#fff; }
+  @keyframes chatPopupFade {
+    0%,78% { opacity:1; }
+    100% { opacity:0; }
+  }
   #chatHistory {
     max-height:230px; overflow-y:auto; padding:9px 11px; margin-bottom:7px;
     background:rgba(0,0,0,.58); border:1px solid rgba(255,255,255,.12);
@@ -91,6 +110,7 @@
   @media(max-width:680px) {
     #chatToggle { top:112px; right:9px; padding:8px 10px; }
     #chatPanel { left:9px; bottom:112px; width:calc(100vw - 18px); }
+    #chatPopups { left:9px; bottom:112px; width:calc(100vw - 18px); font-size:13px; }
     #chatHistory { max-height:180px; }
   }
 
@@ -138,6 +158,7 @@
   <div id="help" class="panel"><strong>CONTROLS</strong><p><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Move / drive &nbsp; <kbd>SPACE</kbd> Jump / handbrake drift<br><kbd>V</kbd> Switch camera &nbsp; <kbd>E</kbd> Enter / exit car<br><kbd>SHIFT</kbd> Sprint &nbsp; <kbd>R</kbd> Reset position &nbsp; <kbd>ESC</kbd> Release mouse</p></div>
   <div id="toast"></div><div id="crosshair"></div>
   <button id="chatToggle" type="button" aria-label="Open chat">💬 Chat <span style="opacity:.7">T</span></button>
+  <div id="chatPopups" aria-live="polite" aria-label="Recent chat messages"></div>
   <section id="chatPanel" aria-label="Multiplayer chat">
     <div id="chatHistory" aria-live="polite"></div>
     <div id="chatComposer">
@@ -1935,6 +1956,27 @@ const chatPanelEl = document.getElementById('chatPanel');
 const chatHistoryEl = document.getElementById('chatHistory');
 const chatInputEl = document.getElementById('chatInput');
 const chatToggleEl = document.getElementById('chatToggle');
+const chatPopupsEl = document.getElementById('chatPopups');
+
+function mpShowChatPopup(item) {
+  if(!chatPopupsEl || !item) return;
+  const line = document.createElement('div');
+  line.className = 'chatPopupLine';
+  const name = document.createElement('span');
+  name.className = 'chatPopupName';
+  name.textContent = String(item.name || 'Player').slice(0,18);
+  const colon = document.createElement('span');
+  colon.className = 'chatPopupColon';
+  colon.textContent = ': ';
+  const message = document.createElement('span');
+  message.className = 'chatPopupMessage';
+  message.textContent = String(item.message || '').slice(0,256);
+  line.append(name, colon, message);
+  chatPopupsEl.appendChild(line);
+  // Keep the HUD readable if several players chat at once.
+  while(chatPopupsEl.children.length > 6) chatPopupsEl.firstElementChild.remove();
+  setTimeout(() => line.remove(), 12000);
+}
 
 function mpRenderChatHistory() {
   chatHistoryEl.replaceChildren();
@@ -1955,7 +1997,7 @@ function mpRenderChatHistory() {
   }
   chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
 }
-function mpReceiveChatMessage(item) {
+function mpReceiveChatMessage(item, notify=true) {
   if(!item || typeof item.message !== 'string') return;
   const cleanMessage = item.message.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0,256);
   if(!cleanMessage) return;
@@ -1966,6 +2008,7 @@ function mpReceiveChatMessage(item) {
   });
   if(mpChatHistory.length > 60) mpChatHistory.splice(0, mpChatHistory.length - 60);
   mpRenderChatHistory();
+  if(notify) mpShowChatPopup(mpChatHistory[mpChatHistory.length - 1]);
 }
 function mpSendChatMessage(rawMessage) {
   const message = String(rawMessage || '').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0,256);
@@ -2180,7 +2223,7 @@ function mpHandlePacket(packet, fromId) {
   if(packet.type === 'CHAT_HISTORY') {
     if(!mpIsHost && Array.isArray(packet.items)) {
       mpChatHistory = [];
-      for(const item of packet.items.slice(-40)) mpReceiveChatMessage(item);
+      for(const item of packet.items.slice(-40)) mpReceiveChatMessage(item, false);
       mpRenderChatHistory();
     }
     return;

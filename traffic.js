@@ -10,10 +10,11 @@
 
 const TR = {cars:[], peds:[]};
 const TRF = {auth:true, wasAuth:true, hitOut:[], honkSeq:0, lastPack:0, bodies:[], spawnCool:0, T0:0, tRecv:0, remoteHonk:new Map(), foci:[]};
-const TR_ROSTER = ['SEDAN', 'SUV', 'TAXI', 'SEDAN', 'VAN', 'SPORT', 'TAXI', 'TRUCK', 'SUV', 'SEDAN', 'BUS', 'BIKE', 'POLICE', 'SEDAN', 'SUV', 'SEDAN'];
+const TR_ROSTER = ['SEDAN', 'SUV', 'TAXI', 'SEDAN', 'VAN', 'SPORT', 'TAXI', 'TRUCK', 'SUV', 'SEDAN', 'BUS', 'BIKE', 'POLICE', 'SEDAN', 'SUV', 'SEDAN',
+  'SEDAN', 'SUV', 'TAXI', 'SEDAN', 'SPORT', 'VAN', 'SEDAN', 'SUV', 'TRUCK', 'BUS', 'SEDAN', 'TAXI', 'BIKE', 'SEDAN', 'SUV', 'SEDAN', 'SEDAN', 'TAXI', 'VAN', 'SUV'];
 const TR_CHASE = [100, 101, 102, 103];
 const TR_PAINTS = {TAXI:0xf4c400, POLICE:0xf2f4f6, BUS:0x1f6fb5, TRUCK:0xe9e9e4, BIKE:0x2f7a3a};
-const NPED = 18;
+const NPED = 36;
 
 function trLanes(hw) { return hw <= 5 ? [1.1] : hw <= 9 ? [2.2, 6.0] : [3.6, 10.4]; }
 function trVec(axis, dir) { return axis === 'x' ? {fx:dir, fz:0, rx:0, rz:dir} : {fx:0, fz:dir, rx:-dir, rz:0}; }
@@ -93,13 +94,13 @@ function aiSpawn(e, foci) {
     if(e.type === 'BUS' && !avenue) continue; if(e.type === 'TRUCK' && hw <= 5) continue;
     const dir = Math.random() < .5 ? 1 : -1, wide = e.type === 'BUS' || e.type === 'TRUCK';
     const lane = wide ? lanes[lanes.length - 1] : lanes[Math.floor(Math.random() * lanes.length)];
-    const s = along + (Math.random() < .5 ? -1 : 1) * (70 + Math.random() * 170), k = Math.round(s / 60);
+    const s = along + (Math.random() < .5 ? -1 : 1) * (55 + Math.random() * 190), k = Math.round(s / 60);
     if(Math.abs(s - 60 * k) < roadHalfW(60 * k) + 10) continue;
     Object.assign(e, {axis, L, dir, lane, s, shift:0, v:0});
     const v = trVec(axis, dir), x = axis === 'z' ? L + v.rx * lane : s, z = axis === 'x' ? L + v.rz * lane : s;
     if(!trClear(x, z, 16)) continue;
     e.cruise = (hw > 10 ? 22 : hw > 5 ? 14 : 9) * (e.type === 'BUS' ? .8 : e.type === 'TRUCK' ? .85 : e.type === 'SPORT' ? 1.15 : .92 + Math.random() * .2);
-    e.v = e.cruise * .6; e.live = true; e.mode = 'lane'; e.rails = true; e.dyn = false; e.intentK = null; e.dwell = 0; e.hazard = false; e.stopDone = null; e.stuckT = 0; e.freeT = 0; e.hit = false; e.turn = null;
+    e.v = e.cruise * .6; e.live = true; e.mode = 'lane'; e.rails = true; e.dyn = false; e.intentK = null; e.dwell = 0; e.turnWait = 0; e.hazard = false; e.stopDone = null; e.stuckT = 0; e.freeT = 0; e.hit = false; e.turn = null;
     e.car.coast = undefined; e.car.kinAI = true; e.car.spin = 0; e.car.angularVel = 0; e.car.steerAngle = 0; e.car.inp = null; e.car.safe = null;
     aiPlace(e); e.car.root.visible = true; return true;
   }
@@ -166,6 +167,11 @@ function aiRails(e, dt) {
     if(e.axis === 'z') { const xl = e.L - d * e.lane, dx = -d; p0 = {x:xl, z:Sx - d * hwc}; p1 = {x:xl, z:Sx + dx * oB}; p2 = {x:e.L + dx * hwA, z:Sx + dx * oB}; T = {axis:'x', dir:dx}; }
     else { const zl = e.L + d * e.lane; p0 = {x:Sx - d * hwc, z:zl}; p1 = {x:Sx - d * oB, z:zl}; p2 = {x:Sx - d * oB, z:e.L + d * hwA}; T = {axis:'z', dir:d}; }
     T.L = Sx; T.lane = oB; T.p0 = p0; T.p1 = p1; T.p2 = p2; T.t = 0; T.len = (2 * (Math.hypot(p1.x - p0.x, p1.z - p0.z) + Math.hypot(p2.x - p1.x, p2.z - p1.z)) + Math.hypot(p2.x - p0.x, p2.z - p0.z)) / 3;
+    // yield: do not start the turn while another vehicle is on the arc or about to arrive in the exit lane
+    const ev = trVec(T.axis, T.dir), back = {x:p2.x - ev.fx * 11, z:p2.z - ev.fz * 11}, mid = {x:(p1.x + p2.x) / 2, z:(p1.z + p2.z) / 2}; let blocked = false;
+    for(const o of TRF.bodies) { if(o.ref === e || o.kind === 'foot' || o.kind === 'ped' || Math.hypot(o.vx_, o.vz_) < 2) continue; for(const q of [p2, mid, back]) if(Math.hypot(o.x - q.x, o.z - q.z) < o.hl * .8 + 2.8) { blocked = true; break; } if(blocked) break; }
+    if(blocked && e.turnWait < 3) { e.turnWait = (e.turnWait || 0) + dt; e.v = Math.max(0, e.v - 9 * dt); e.brake = true; aiPlace(e); return; }
+    e.turnWait = 0;
     e.turn = T; e.mode = 'turn'; e.intent = 'S'; return;
   }
   aiPlace(e);

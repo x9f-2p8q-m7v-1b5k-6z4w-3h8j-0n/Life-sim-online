@@ -32,7 +32,13 @@ function onKey(e, down) {
 addEventListener('keydown', e => onKey(e, true));
 addEventListener('keyup', e => onKey(e, false));
 addEventListener('blur', () => { for(const k in keys) keys[k] = false; });
-renderer.domElement.addEventListener('click', () => { if(running && !mouseLocked) renderer.domElement.requestPointerLock?.(); });
+// Pointer lock can reject (e.g. right after pressing Esc); that is harmless, so never let it surface as an error
+let lastLockTry = 0;
+function lockPointer() {
+  const now = performance.now(); if(now - lastLockTry < 1400) return; lastLockTry = now;
+  try { const p = renderer.domElement.requestPointerLock && renderer.domElement.requestPointerLock(); if(p && p.catch) p.catch(() => {}); } catch(e) {}
+}
+renderer.domElement.addEventListener('click', () => { if(running && !mouseLocked) lockPointer(); });
 document.addEventListener('pointerlockchange', () => { mouseLocked = document.pointerLockElement === renderer.domElement; });
 document.addEventListener('mousemove', e => {
   if(mouseLocked) {

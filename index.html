@@ -176,7 +176,7 @@
 import * as THREE from 'three';
 import { Peer } from 'https://esm.sh/peerjs@1.5.4';
 window.THREE = THREE; window.Peer = Peer;
-const V = '2'; // bump this number when you update files, to bypass browser caching
+const V = '3'; // bump this number when you update files, to bypass browser caching
 const FILES = ['world', 'vehicles', 'game', 'net', 'systems', 'fx', 'drive', 'physics', 'props', 'traffic', 'avatars', 'main'];
 function showError(msg) {
   if (document.getElementById('errBox')) return;
@@ -185,7 +185,7 @@ function showError(msg) {
   d.textContent = 'LifeSim hit an error - please copy this:\n\n' + msg; document.body.appendChild(d);
 }
 addEventListener('error', e => showError(e.message + '\n' + (e.filename || '') + ':' + e.lineno));
-addEventListener('unhandledrejection', e => showError('Promise error: ' + (e.reason && e.reason.stack || e.reason)));
+addEventListener('unhandledrejection', e => { if(e.reason && /pointer ?lock/i.test(String(e.reason.message || e.reason))) { e.preventDefault(); return; } showError('Promise error: ' + (e.reason && e.reason.stack || e.reason)); });
 try { // post-processing is optional: the game still runs without it
   const P = 'three/addons/postprocessing/';
   const [a, b, c, d] = await Promise.all([import(P + 'EffectComposer.js'), import(P + 'RenderPass.js'), import(P + 'UnrealBloomPass.js'), import(P + 'OutputPass.js')]);

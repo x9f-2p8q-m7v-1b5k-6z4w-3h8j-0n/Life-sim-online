@@ -40,7 +40,7 @@ document.getElementById('startButton').addEventListener('click', () => {
   running = true;
   startScreen.style.display = 'none';
   startMultiplayer();
-  renderer.domElement.requestPointerLock?.();
+  lockPointer();
   toast(`Welcome, ${mpDisplayName} · Joining LifeSim Metropolis`);
 });
 
